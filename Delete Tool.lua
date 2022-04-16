@@ -54,7 +54,7 @@ del.Equipped:Connect(function()
 	b1p = m.Button1Up:Connect(function()
 		local old = lp.Character.HumanoidRootPart.CFrame
 		ivory()
-		wait(0.3)
+		repeat wait() until lp.Backpack:FindFirstChild("IvoryPeriastron")
 		equipivory()
 		if m.Target and m.Target:IsA("BasePart") and not m.Target:IsDescendantOf(lp.Character) then
 			move(m.Target)
@@ -84,7 +84,7 @@ del.Equipped:Connect(function()
 	b1p = m.Button1Up:Connect(function()
 		local old = lp.Character.HumanoidRootPart.CFrame
 		ivory()
-		wait(0.3)
+		repeat wait() until lp.Backpack:FindFirstChild("IvoryPeriastron")
 		equipivory()
 		if m.Target and m.Target:IsA("BasePart") and not m.Target:IsDescendantOf(lp.Character) then
 			move(m.Target)
@@ -121,7 +121,6 @@ del.Equipped:Connect(function()
 						end
 						wait(0.2)
 						lp.Character.HumanoidRootPart.CFrame = old
-
 					end)
 				end)
 				del.Unequipped:Connect(function()
