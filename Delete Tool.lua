@@ -1,3 +1,4 @@
+--My roblox user: me_kevin3050ti
 function ivory()
 	game:GetService("Players"):Chat("gear me 0000000000000108158379")
 end
