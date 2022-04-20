@@ -1,4 +1,4 @@
---My roblox user: me_kevin3050ti
+--Dont steal anything from here pls and also my name is me_kevin3050ti and dc - humanoid#5242
 function ivory()
 	game:GetService("Players"):Chat("gear me 0000000000000108158379")
 end
