@@ -33,7 +33,6 @@ lplr.CharacterAdded:Connect(function()
       tor.Changed:Connect(function()
 	if tor.Velocity == Vector3.new(0,0,0) then
 		tor.Velocity = oldvel
-	     end
-	end)
-end)
+	    end
+      end)
 end)		
