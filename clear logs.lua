@@ -1,4 +1,3 @@
-local clearlogs = true
-while wait(0000.0000000001) do if clearlogs == true then game.Players:Chat("swag 😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎 idk why shortcut v1 is so bad and borngggggggggg") end end
-wait(5)
-clearlogs = false
+for i = 1,100 do
+  game.Players:Chat("ff "..game:GetService("HttpService"):GenerateGUID(true))
+end
