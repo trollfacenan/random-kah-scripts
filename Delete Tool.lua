@@ -19,7 +19,7 @@ function move(target)
 		local looping = true
 		spawn(function()
 			while true do
-				game:GetService('RunService').Heartbeat:Wait()
+				game:GetService('RunService').Heartbeat:wait()
 				game.Players.LocalPlayer.Character['Humanoid']:ChangeState(11)
 				target.RotVelocity = Vector3.new(0,0,0)
 		                target.Velocity = Vector3.new(0,0,0)
@@ -27,7 +27,7 @@ function move(target)
 				if not looping then break end
 			end
 		end)
-		spawn(function() while looping do wait(.1) game:GetService("Players"):Chat('unpunish me') end end)
+		spawn(function() while looping do game:GetService('RunService').Heartbeat:wait() game:GetService("Players"):Chat('unpunish me') end end)
 		wait(0.3)
 		looping = false
 		lp.Character.IvoryPeriastron.Remote:FireServer(Enum.KeyCode.E)
