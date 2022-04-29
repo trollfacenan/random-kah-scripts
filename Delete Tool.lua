@@ -1,8 +1,6 @@
---Dont steal anything from here pls and also my name is me_kevin3050ti and dc - humanoid#5242
---note that its not that hard to find the objects so if you want change the deletepos to different (DONT REMOVE THE CFrame.new AND THE BRACKETS)
---if you have some anti void on, disable it otherwise its really ez to find it
-local deletepos = CFrame.new(-800000,-783321,-951223)
--- do not edit anything below unless you know what you're doing
+--dc - humanoid#5242, roblox - me_kevin3050ti
+local random = true -- set true to false if you want to use custom delete position
+local customdeletepos = CFrame.new(-800000,-783321,-951223)
 function ivory()
 	game:GetService("Players"):Chat("gear me 0000000000000108158379")
 end
@@ -15,7 +13,7 @@ end
 function move(target)
 	if lp.Character:FindFirstChild("IvoryPeriastron") then
 		local cf = lp.Character.HumanoidRootPart
-		cf.CFrame = deletepos
+		if not random == true then cf.CFrame = customdeletepos else cf.CFrame = CFrame.new(math.random(200000,-700000),math.random(-300000,-770703),math.random(200000,-700000)) end
 		wait(0.2)
 		lp.Character.IvoryPeriastron.Remote:FireServer(Enum.KeyCode.E)
 		local looping = true
