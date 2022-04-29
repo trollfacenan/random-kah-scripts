@@ -1,5 +1,4 @@
-
---This is not mine and I don't recommend changing the prefix so the GUI buttons work
+--note: lagall and tesk doesn't work on fluxus
 -- CONFIG THIS BEFORE INJECTING!
 -- CONFIG THIS BEFORE INJECTING!
 -- CONFIG THIS BEFORE INJECTING!
