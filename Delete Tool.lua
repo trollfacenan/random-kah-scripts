@@ -13,7 +13,7 @@ end
 function move(target)
 	if lp.Character:FindFirstChild("IvoryPeriastron") then
 		local cf = lp.Character.HumanoidRootPart
-		if not random == true then cf.CFrame = customdeletepos else cf.CFrame = CFrame.new(math.random(200000,-700000),math.random(-300000,-770703),math.random(200000,-700000)) end
+		if not random == true then cf.CFrame = customdeletepos else cf.CFrame = CFrame.new(math.random(-800000,-100000),math.random(-980053,-123387),math.random(-800000,-100000)) end
 		wait(0.2)
 		lp.Character.IvoryPeriastron.Remote:FireServer(Enum.KeyCode.E)
 		local looping = true
@@ -27,7 +27,7 @@ function move(target)
 				if not looping then break end
 			end
 		end)
-		spawn(function() while looping do wait(.1) game:GetService("Players"):Chat('unpunish me') end end) -- Do not change the command otherwise it won't attach
+		spawn(function() while looping do wait(.1) game:GetService("Players"):Chat('unpunish me') end end)
 		wait(0.3)
 		looping = false
 		lp.Character.IvoryPeriastron.Remote:FireServer(Enum.KeyCode.E)
