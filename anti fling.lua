@@ -1,3 +1,4 @@
+-- fixed the second time runner xd
 local lplr = game:GetService("Players").LocalPlayer
 local char = workspace[lplr.Name]
 local tor = char.Torso
@@ -17,7 +18,7 @@ tor.ChildAdded:Connect(function(v)
 		until not v
 	end
 end)
-lplr.CharacterAdded:Connect(function()
+lplr.CharacterAppearanceLoaded:Connect(function()
      tor = lplr.Character.Torso
      oldvel = tor.Velocity
      tor.ChildAdded:Connect(function(v)
