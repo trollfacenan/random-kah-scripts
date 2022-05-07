@@ -13,7 +13,7 @@ end
 function move(target)
 	if lp.Character:FindFirstChild("IvoryPeriastron") then
 		local cf = lp.Character.HumanoidRootPart
-		if not random == true then cf.CFrame = customdeletepos else cf.CFrame = CFrame.new(math.random(-800000,-100000),math.random(-980053,-123387),math.random(-800000,-100000)) end
+		if not random == true then cf.CFrame = customdeletepos else cf.CFrame = CFrame.new(math.random(-800000,-100000),math.random(-980053,-123387),math.random(800000,100000)) end
 		wait(0.2)
 		lp.Character.IvoryPeriastron.Remote:FireServer(Enum.KeyCode.E)
 		local looping = true
