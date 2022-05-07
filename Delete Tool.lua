@@ -1,4 +1,4 @@
---dc - humanoid#5242, roblox - me_kevin3050ti
+--lmao horrible i broke it (Fixed now)
 local random = true -- set true to false if you want to use custom delete position
 local customdeletepos = CFrame.new(-800000,-783321,-951223)
 function ivory()
@@ -13,7 +13,7 @@ end
 function move(target)
 	if lp.Character:FindFirstChild("IvoryPeriastron") then
 		local cf = lp.Character.HumanoidRootPart
-		if not random == true then cf.CFrame = customdeletepos else cf.CFrame = CFrame.new(math.random(-800000,-100000),math.random(-980053,-123387),math.random(800000,100000)) end
+		if not random == true then cf.CFrame = customdeletepos else cf.CFrame = CFrame.new(math.random(-800000,-100000),math.random(-980053,-123387),math.random(-800000,-100000)) end
 		wait(0.2)
 		lp.Character.IvoryPeriastron.Remote:FireServer(Enum.KeyCode.E)
 		local looping = true
@@ -23,8 +23,7 @@ function move(target)
 				game.Players.LocalPlayer.Character['Humanoid']:ChangeState(11)
 				target.RotVelocity = Vector3.new(0,0,0)
 		                target.Velocity = Vector3.new(0,0,0)
-				local e = target.CFrame*CFrame.new(-1*CFrame.new(target.Size.X/2)-(cf.Parent:WaitForChild("Torso").Size.X/2),0,0)
-				cf.CFrame = e
+				cf.CFrame = target.CFrame * CFrame.new(-1*(target.Size.X/2)-(lp.Character['Torso'].Size.X/2), 0, 0)
 				if not looping then break end
 			end
 		end)
