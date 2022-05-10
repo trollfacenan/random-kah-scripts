@@ -23,7 +23,7 @@ function move(target)
 				game.Players.LocalPlayer.Character['Humanoid']:ChangeState(11)
 				target.RotVelocity = Vector3.new(0,0,0)
 		                target.Velocity = Vector3.new(0,0,0)
-				cf.CFrame = target.CFrame * CFrame.new(-1*(target.Size.X/2)-(lp.Character['Torso'].Size.X/2), 0, 0)
+				cf.CFrame = target.CFrame * CFrame.new(-1*(target.Size.X/2)-(p.LocalPlayer.Character['Torso'].Size.X/2), 0, 0)
 				if not looping then break end
 			end
 		end)
