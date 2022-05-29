@@ -1,19 +1,23 @@
---lmao horrible i broke it (Fixed now)
+if game.Players.LocalPlayer.PlayerGui:FindFirstChild("SCV2_ButtonList") or game.Players.LocalPlayer.PlayerGui:FindFirstChild("ScV2_ButtonList") or game.Players.LocalPlayer.PlayerGui:FindFirstChild("sCV2_ButtonList") or game.Players.LocalPlayer.PlayerGui:FindFirstChild("scV2_ButtonList") then
+	game.Players:Chat('//bmove')
+	print('The delete tool did not launch because shortcut v2 was detected, please use //kbmove in shortcut v2 to get the delete tool if you are premium.')
+	wait(9e9)
+end	
 local random = true -- set true to false if you want to use custom delete position
 local customdeletepos = CFrame.new(-800000,-783321,-951223)
-function ivory()
+local function ivory()
 	game:GetService("Players"):Chat("gear me 0000000000000108158379")
 end
 local lp = game:GetService("Players").LocalPlayer
-function equipivory()
+local function equipivory()
 	if lp.Backpack:FindFirstChild("IvoryPeriastron") then
 		lp.Backpack.IvoryPeriastron.Parent = lp.Character
 	end
 end
-function move(target)
+local function move(target)
 	if lp.Character:FindFirstChild("IvoryPeriastron") then
 		local cf = lp.Character.HumanoidRootPart
-		if not random == true then cf.CFrame = customdeletepos else cf.CFrame = CFrame.new(math.random(-800000,-100000),math.random(-980053,-123387),math.random(-800000,-100000)) end
+		if not random == true then cf.CFrame = customdeletepos else cf.CFrame = CFrame.new(math.random(-800000,-100000),math.random(-980053,-123387),math.random(-768319,-492917)) end
 		wait(0.2)
 		lp.Character.IvoryPeriastron.Remote:FireServer(Enum.KeyCode.E)
 		local looping = true
@@ -31,7 +35,7 @@ function move(target)
 		wait(0.3)
 		looping = false
 		lp.Character.IvoryPeriastron.Remote:FireServer(Enum.KeyCode.E)
-		wait(0.3)
+		wait(0.1)
 		game:GetService("Players"):Chat("respawn me")
 	end
 end
