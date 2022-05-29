@@ -1,8 +1,7 @@
-if game.Players.LocalPlayer.PlayerGui:FindFirstChild("SCV2_ButtonList") or game.Players.LocalPlayer.PlayerGui:FindFirstChild("ScV2_ButtonList") or game.Players.LocalPlayer.PlayerGui:FindFirstChild("sCV2_ButtonList") or game.Players.LocalPlayer.PlayerGui:FindFirstChild("scV2_ButtonList") then
+--[[if game.Players.LocalPlayer.PlayerGui:FindFirstChild("SCV2_ButtonList") or game.Players.LocalPlayer.PlayerGui:FindFirstChild("ScV2_ButtonList") or game.Players.LocalPlayer.PlayerGui:FindFirstChild("sCV2_ButtonList") or game.Players.LocalPlayer.PlayerGui:FindFirstChild("scV2_ButtonList") then
 	game.Players:Chat('//bmove')
-	print('The delete tool did not launch because shortcut v2 was detected, please use //kbmove in shortcut v2 to get the delete tool if you are premium.')
 	wait(9e9)
-end	
+end]]
 local random = true -- set true to false if you want to use custom delete position
 local customdeletepos = CFrame.new(-800000,-783321,-951223)
 local function ivory()
