@@ -1,4 +1,4 @@
--- 
+-- loadstring(game:HttpGet("https://raw.githubusercontent.com/trollfacenan/random-kah-scripts/main/ColorAPI.lua"))()
 
 local colorAPI = {}
 local v1 = "PaintPart"
