@@ -1,3 +1,4 @@
+--not mine (T3chn0#0253's) republished if it gets deleted xd but well its broken itself (breaks sometimes)
 for i,v in pairs(game.Workspace.Terrain["_Game"].Workspace.Obby:GetChildren()) do
     if v.Name == "Jump" then
         v:Destroy()
