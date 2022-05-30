@@ -1,3 +1,4 @@
+--messy regen attach thingy
 plrys = game.Players
 				local looping = true
 				while true do game.RunService.Heartbeat:wait()
