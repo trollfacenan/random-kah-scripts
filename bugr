@@ -1,0 +1,14 @@
+local nochezsob = false
+spawn(function()
+while true do
+spawn(function()
+wait(6.9)
+nochezsob = true
+end)
+print("U can has chezburger!!111!!!!")
+game.Players:Chat("gear me 16726030")
+if nochezsob == true then
+break
+end
+end
+end)
