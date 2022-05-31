@@ -1,6 +1,7 @@
 local nochezsob = false
 spawn(function()
 while true do
+wait()
 spawn(function()
 wait(6.9)
 nochezsob = true
