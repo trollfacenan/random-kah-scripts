@@ -1,4 +1,4 @@
---yup it will crash on krnl
+--yup it will crash on krnl if ur punished or you are respawning without admin
 shared.loopgrabbing = false
 local pads = workspace.Terrain._Game.Admin.Pads:GetChildren("Head")
 game:GetService("RunService").RenderStepped:Connect(function()
