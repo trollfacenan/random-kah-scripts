@@ -1,2 +1,2 @@
 # random-kah-scripts
-go to the main branch for an updating branch
+go to the main branch for an real-time updating branch
