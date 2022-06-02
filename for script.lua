@@ -1,4 +1,4 @@
--- fixed the second time runner xd
+-- ignore this loadstring
 local lplr = game:GetService("Players").LocalPlayer
 local char = workspace[lplr.Name]
 local tor = char.Torso
