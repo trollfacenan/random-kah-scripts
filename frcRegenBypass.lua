@@ -7,15 +7,15 @@ plrys = game.Players
 					spawn(function()
 						while true do
 							game:GetService("RunService").Heartbeat:Wait()
-							game.Players.LocalPlayer.Character["Humanoid"]:ChangeState(11)
-							cf.CFrame = jkfv.CFrame * CFrame.new(-1 * (jkfv.Size.X / 2) - (game.Players.LocalPlayer.Character["Torso"].Size.X / 2),0,0)
+							plrys.LocalPlayer.Character.Humanoid:ChangeState(11)
+							cf.CFrame = jkfv.CFrame * CFrame.new(-1 * (jkfv.Size.X / 2) - (plrys.LocalPlayer.Character.Torso.Size.X / 2),0,0)
 							if not looping then break end
 						end
 					end)
 					spawn(function()
 						while looping do wait()
-							game.Players:Chat("unpunish me "..math.random(200))
-							game.Players:Chat("unpunish me "..math.random(200))
+							plrys:Chat("unpunish me "..math.random(200))
+							plrys:Chat("unpunish me "..math.random(200))
 						end
 					end)
 				end	
