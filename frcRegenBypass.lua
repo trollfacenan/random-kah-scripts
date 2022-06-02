@@ -9,7 +9,7 @@ plrys = game.Players
 							game:GetService("RunService").Heartbeat:Wait()
 							plrys.LocalPlayer.Character.Humanoid:ChangeState(11)
 							cf.CFrame = jkfv.CFrame * CFrame.new(-1 * (jkfv.Size.X / 2) - (plrys.LocalPlayer.Character.Torso.Size.X / 2),0,0)
-							if not looping then break end
+							if looping == false then break end
 						end
 					end)
 					spawn(function()
