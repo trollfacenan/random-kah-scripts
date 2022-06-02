@@ -1,7 +1,7 @@
 --messy regen attach thingy
 plrys = game.Players
 				local looping = true
-				while true do game.RunService.Heartbeat:wait()
+				while true do game:GetService("RunService").Heartbeat:wait()
 					local jkfv = workspace.Terrain._Game.Admin.Regen
 					local cf = plrys.LocalPlayer.Character.HumanoidRootPart
 					spawn(function()
@@ -13,10 +13,9 @@ plrys = game.Players
 						end
 					end)
 					spawn(function()
-						while true do wait(0.1)
-							game.Players:Chat("unpunish me")
-							game.Players:Chat("unpunish me")
-							if not looping then break end
+						while looping do wait()
+							game.Players:Chat("unpunish me "..math.random(200))
+							game.Players:Chat("unpunish me "..math.random(200))
 						end
 					end)
 				end	
