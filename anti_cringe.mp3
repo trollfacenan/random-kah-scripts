@@ -1,0 +1,82 @@
+local plrs = game:GetService("Players")
+local bantbl = {}
+local function ruinchatfnc()
+	for i = 1,128 do plrs:Chat("h ############################################################################################################################################################################################################################################################################################################################################################################################################################# others") end
+	wait(.75)
+	for i = 1,128 do plrs:Chat("h ##############################################################################################################################################################################################################################################################################################################################################################################################################################################################################################") end
+end
+local function sbanaction(arg)
+	spawn(function()
+		plrs:Chat("setgrav "..arg.." -9e9")
+		wait()
+		plrs:Chat("punish "..arg)
+	end)
+	spawn(function() ruinchatfnc() wait(.65) ruinchatfnc() end)
+	wait(1)
+	plrs:Chat("setgrav others nan")
+	wait(1)
+	ruinchatfnc()
+	plrs:Chat("punish "..arg)
+	ruinchatfnc()
+	spawn(function()
+		wait(.25)
+		ruinchatfnc()
+		wait(.25)
+		ruinchatfnc()
+		ruinchatfnc()
+		wait(.25)
+		ruinchatfnc()
+	end)
+	plrs:Chat("punish "..arg)
+	wait(1.25)
+	plrs:Chat("setgrav others nan")
+	wait(.88)
+	ruinchatfnc()
+	spawn(function()
+		ruinchatfnc()
+		wait()
+		ruinchatfnc()
+		wait()
+		ruinchatfnc()
+	end)
+	plrs:Chat("punish "..arg)
+	wait(2)
+	plrs:Chat("setgrav others nan")
+	--plrs:Chat("punish".. arg)
+	wait(2)
+	ruinchatfnc()
+	wait()
+	ruinchatfnc()
+	ruinchatfnc()
+	wait()
+	ruinchatfnc()
+	wait(1.28)
+	plrs:Chat("setgrav others nan")
+end
+local function start(plr)
+	spawn(function()
+		plr.Chatted:Connect(function(msg)
+			if string.find(msg:lower(),"cring") then
+				plrs:Chat("pm "..plr.Name.." Lol imagine saying that")
+				sbanaction(plr.Name)
+				table.insert(bantbl,plr.Name)
+			end
+		end)
+	end)
+end
+for i,pler in pairs(plrs:GetPlayers()) do
+	start(pler)
+end
+plrs.PlayerAdded:Connect(function(pler)
+	start(pler)
+end)
+while true do
+	game:GetService("RunService").RenderStepped:Wait()
+	for ab,s in pairs(bantbl) do
+		for bac,on in pairs(workspace:GetChildren()) do
+			if on.Name == s then
+				sbanaction(on.Name)
+			end
+		end
+	end
+end
