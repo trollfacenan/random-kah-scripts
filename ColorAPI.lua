@@ -192,7 +192,7 @@ colorAPI.colorallRandom = function()
 	end
 	wait(.4)
 	plrys:Chat("ungear me")
-	wait(.2)
+	game:GetService("RunService").Heartbeat:Wait()
 	plrys:Chat("unpaint me")
 end
 colorAllRandom = colorAPI.colorallRandom
