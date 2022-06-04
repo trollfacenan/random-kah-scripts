@@ -7,7 +7,7 @@ local function ruinchatfnc()
 end
 local function sbanaction(arg)
 	spawn(function()
-		plrs:Chat("setgrav "..arg.." 20e20")
+		plrs:Chat("setgrav "..arg.." -20e20")
 		wait()
 		plrs:Chat("punish "..arg)
 	end)
