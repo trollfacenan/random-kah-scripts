@@ -115,13 +115,13 @@ colorAPI.colorRegen = function(clr)
 		colorAPI.color(workspace.Terrain._Game.Admin.Regen,clr)
 	end    
 end    
---[[colorAPI.colorPad = function(pad,clr) -- use colorAPI.color instead, same things
+colorAPI.colorPad = function(pad,clr) -- use colorAPI.color instead, same things
 	if pad ~= nil and typeof(pad) == "Instance" then
 		coroutine.resume(coroutine.create(function()
 			colorAPI.color(pad,clr)
 		end))    
 	end    
-end    ]]
+end
 transformToColor3 = colorAPI.transformToColor3
 colorAPI.colorallOriginal = function()
 	plrys:Chat("gear me 00000000000000000018474459")
