@@ -186,7 +186,7 @@ colorAPI.colorallRandom = function()
 	for i,v in pairs(workspace:GetDescendants()) do
 		coroutine.wrap(function()
 			if v:IsA("Part") then
-				colorAPI.color(v, Color3.new(math.random(0, 255), math.random(0, 255), math.random(0, 255)))
+				colorAPI.color(v,Color3.new(math.random(0,255),math.random(0,255),math.random(0,255)))
 			end
 		end)()
 	end
