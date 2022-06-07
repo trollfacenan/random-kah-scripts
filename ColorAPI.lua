@@ -115,13 +115,13 @@ colorAPI.colorRegen = function(clr)
 		colorAPI.color(workspace.Terrain._Game.Admin.Regen,clr)
 	end    
 end    
-colorAPI.colorPad = function(pad,clr)
+--[[colorAPI.colorPad = function(pad,clr) -- use colorAPI.color instead, same things
 	if pad ~= nil and typeof(pad) == "Instance" then
 		coroutine.resume(coroutine.create(function()
 			colorAPI.color(pad,clr)
 		end))    
 	end    
-end    
+end    ]]
 transformToColor3 = colorAPI.transformToColor3
 colorAPI.colorallOriginal = function()
 	plrys:Chat("gear me 00000000000000000018474459")
@@ -179,16 +179,16 @@ end
 colorallOriginal = colorAPI.colorallOriginal
 colorAllOriginal = colorAPI.colorallOriginal
 colorAPI.colorallRandom = function()
-	local thngs = workspace:GetDescendants()
 	game:GetService("Players"):Chat("gear me 00000000000000000018474459")
 	wait(1)
 	game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack.PaintBucket)
-	wait(.28)
-	for i,prt in pairs(thngs) do
-		spawn(function()
-			--basepart doesnt ignore things like weld probably so i had to do it this way
-			if prt:IsA("Part") or prt:IsA("UnionOperation") or prt:IsA("MeshPart") then colorAPI.color(prt, Color3.new(math.random(0, 255), math.random(0, 255), math.random(0, 255))) end
-		end)
+	wait(.25)
+	for i,v in pairs(workspace:GetDescendants()) do
+		coroutine.wrap(function()
+			if v:IsA("Part") then
+				colorAPI.color(v, Color3.new(math.random(0, 255), math.random(0, 255), math.random(0, 255)))
+			end
+		end)()
 	end
 	wait(.4)
 	plrys:Chat("ungear me")
