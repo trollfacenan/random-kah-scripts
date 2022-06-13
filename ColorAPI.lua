@@ -1,7 +1,7 @@
 -- loadstring(game:HttpGet("https://raw.githubusercontent.com/trollfacenan/random-kah-scripts/main/ColorAPI.lua"))()
 
-local colorAPI = {}
-local v1 = "PaintPart"
+colorAPI = {}
+v1 = "PaintPart"
 local obbyBricks = workspace.Terrain._Game.Workspace.Obby:GetChildren()
 local adminPads = workspace.Terrain._Game.Admin.Pads:GetChildren()
 local house = workspace.Terrain._Game.Workspace["Basic House"]:GetChildren()
