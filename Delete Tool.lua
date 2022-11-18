@@ -1,11 +1,23 @@
---[[if game.Players.LocalPlayer.PlayerGui:FindFirstChild("SCV2_ButtonList") or game.Players.LocalPlayer.PlayerGui:FindFirstChild("ScV2_ButtonList") or game.Players.LocalPlayer.PlayerGui:FindFirstChild("sCV2_ButtonList") or game.Players.LocalPlayer.PlayerGui:FindFirstChild("scV2_ButtonList") then
-	game.Players:Chat('//bmove')
-	wait(9e9)
-end]]
-local random = true -- set true to false if you want to use custom delete position
-local customdeletepos = CFrame.new(-800000,-783321,-951223)
+local chatbox = Instance.new("TextBox", workspace)
+local function chat(msg)
+    chatbox:SetTextFromInput(msg)
+    game.Players:Chat(msg)
+end
+function SC_Check() 
+	if game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("SCV2_ButtonList") or game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("ScV2_ButtonList") or game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("sCV2_ButtonList") or game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("scV2_ButtonList") then
+		return true
+	end
+	return false
+end
+if SC_Check() then
+	print("Delete Tool is incompatible with Shortcut v2.")
+	chat("//bmove")
+	return
+end	
+local random = true -- set this to false if you want to use custom delete position
+local customdeletepos = CFrame.new(-491323,783321,54662)
 local function ivory()
-	game:GetService("Players"):Chat("gear me 0000000000000108158379")
+	chat("gear me 0000000000000108158379")
 end
 local lp = game:GetService("Players").LocalPlayer
 local function equipivory()
@@ -30,12 +42,12 @@ local function move(target)
 				if not looping then break end
 			end
 		end)
-		spawn(function() while looping do game:GetService('RunService').Heartbeat:wait() game:GetService("Players"):Chat('unpunish me') end end)
-		wait(0.3)
+		task.spawn(function() while looping do game:GetService('RunService').Heartbeat:wait() game:GetService("Players"):Chat('unpunish me') end end)
+		task.wait(0.3)
 		looping = false
 		lp.Character.IvoryPeriastron.Remote:FireServer(Enum.KeyCode.E)
-		wait(0.1)
-		game:GetService("Players"):Chat("respawn me")
+		task.wait(0.1)
+		chat("respawn me")
 	end
 end
 local del = Instance.new("Tool")
@@ -67,7 +79,7 @@ del.Equipped:Connect(function()
 		if m.Target and m.Target:IsA("BasePart") and not m.Target:IsDescendantOf(lp.Character) then
 			move(m.Target)
 		end
-		wait(0.2)
+		task.wait(0.2)
 		lp.Character.HumanoidRootPart.CFrame = old
 		local del = Instance.new("Tool")
 del.Name = "Delete"
@@ -97,7 +109,7 @@ del.Equipped:Connect(function()
 		if m.Target and m.Target:IsA("BasePart") and not m.Target:IsDescendantOf(lp.Character) then
 			move(m.Target)
 		end
-		wait(0.2)
+		task.wait(0.2)
 		lp.Character.HumanoidRootPart.CFrame = old
 				local del = Instance.new("Tool")
 				del.Name = "Delete"
@@ -122,12 +134,12 @@ del.Equipped:Connect(function()
 					b1p = m.Button1Up:Connect(function()
 						local old = lp.Character.HumanoidRootPart.CFrame
 						ivory()
-						wait(0.3)
+						task.wait(0.3)
 						equipivory()
 						if m.Target and m.Target:IsA("BasePart") and not m.Target:IsDescendantOf(lp.Character) then
 							move(m.Target)
 						end
-						wait(0.2)
+						task.wait(0.2)
 						lp.Character.HumanoidRootPart.CFrame = old
 					end)
 				end)
