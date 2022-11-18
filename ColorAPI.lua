@@ -1,5 +1,11 @@
--- loadstring(game:HttpGet("https://raw.githubusercontent.com/trollfacenan/random-kah-scripts/main/ColorAPI.lua"))()
+-- fixed after a million years lmao
 
+local chatbox = Instance.new("TextBox", workspace)
+local function chat(msg)
+    chatbox:SetTextFromInput(msg)
+    game:GetService("Players"):Chat(msg)
+end
+local Chat
 colorAPI = {}
 local v1 = "PaintPart"
 local obbyBricks = workspace.Terrain._Game.Workspace.Obby:GetChildren()
@@ -9,6 +15,7 @@ local adminDivs = workspace.Terrain._Game.Workspace["Admin Dividers"]:GetChildre
 local bricks = workspace.Terrain._Game.Workspace["Building Bricks"]:GetChildren()
 local plrys = game:GetService("Players")
 
+Chat = chat
 colorAPI.transformToColor3 = function(BrickClr)
 	if typeof(BrickClr) == "BrickColor" then
 		return BrickClr.Color
@@ -16,7 +23,6 @@ colorAPI.transformToColor3 = function(BrickClr)
 end
 transformToColor3 = colorAPI.transformToColor3
 colorAPI.color = function(prt, clr)
-	--from siyamicik's colorapi2.0 (https://raw.githubusercontent.com/Qltxi/scripts/main/Color%20API%202.0) (needed it cuz speed boost)
 	local thread = coroutine.create(function()
 		local Arguments =
 			{
@@ -115,19 +121,19 @@ colorAPI.colorRegen = function(clr)
 		colorAPI.color(workspace.Terrain._Game.Admin.Regen,clr)
 	end    
 end    
-colorAPI.colorPad = function(pad,clr) -- use colorAPI.color instead, same things
+colorAPI.colorPad = function(pad,clr)
 	if pad ~= nil and typeof(pad) == "Instance" then
 		coroutine.resume(coroutine.create(function()
 			colorAPI.color(pad,clr)
 		end))    
-	end    
+	end
 end
 transformToColor3 = colorAPI.transformToColor3
 colorAPI.colorallOriginal = function()
-	plrys:Chat("gear me 00000000000000000018474459")
-	wait(1)
-	plrys.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack.PaintBucket)
-	wait(.28)
+	Chat("gear me 00000000000000000018474459")
+	repeat task.wait(.1) until plrys.LocalPlayer.Backpack:FindFirstChild("PaintBucket")
+	plrys.LocalPlayer.Character.Humanoid:EquipTool(plrys.LocalPlayer.Backpack.PaintBucket)
+	task.wait(.28)
 	coroutine.resume(coroutine.create(function()
 		colorAPI.colorHouse({
 			wallsC = colorAPI.transformToColor3(BrickColor.new("Brick yellow")),
@@ -174,15 +180,15 @@ colorAPI.colorallOriginal = function()
 	end))
 	colorAPI.colorRegen(colorAPI.transformToColor3(BrickColor.new("Bright violet")))
 	wait(.6)
-	plrys:Chat("ungear me "..math.random(2069))
+	Chat("ungear me "..math.random(2069))
 end
 colorallOriginal = colorAPI.colorallOriginal
 colorAllOriginal = colorAPI.colorallOriginal
 colorAPI.colorallRandom = function()
 	game:GetService("Players"):Chat("gear me 00000000000000000018474459")
-	wait(1)
+	task.wait(1)
 	game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack.PaintBucket)
-	wait(.25)
+	task.wait(.25)
 	for i,v in pairs(workspace:GetDescendants()) do
 		coroutine.wrap(function()
 			if v:IsA("Part") then
@@ -190,12 +196,10 @@ colorAPI.colorallRandom = function()
 			end
 		end)()
 	end
-	wait(.4)
-	plrys:Chat("ungear me")
+	task.wait(.4)
+	Chat("ungear me")
 	game:GetService("RunService").Heartbeat:Wait()
-	plrys:Chat("unpaint me")
+	Chat("unpaint me")
 end
 colorAllRandom = colorAPI.colorallRandom
 colorallRandom = colorAPI.colorallRandom
---colorallRandom()
---colorAllOriginal()
