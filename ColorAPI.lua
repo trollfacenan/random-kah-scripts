@@ -179,7 +179,7 @@ colorAPI.colorallOriginal = function()
 		end 
 	end))
 	colorAPI.colorRegen(colorAPI.transformToColor3(BrickColor.new("Bright violet")))
-	wait(.6)
+	task.wait(.6)
 	Chat("ungear me "..math.random(2069))
 end
 colorallOriginal = colorAPI.colorallOriginal
