@@ -1,4 +1,5 @@
 local lp = game:GetService("Players").LocalPlayer
+if lp.Character:FindFirstChild("Torso") == nil then warn("No R6 torso found. If you are using R15, please switch to R6. If you just didn't spawn, then wait until you're spawned. (Anti Spin)") return end
 local c = lp.Character
 c:WaitForChild("Torso",999).ChildAdded:Connect(function(s)
 	if s.Name == "SPINNER" then
@@ -13,7 +14,7 @@ c:WaitForChild("Torso",999).ChildAdded:Connect(function(s)
 	end
 end)
 lp.CharacterAdded:Connect(function()
-	repeat wait() until workspace:FindFirstChild(lp.Name) and workspace[lp.Name]:FindFirstChild("Torso")
+	repeat task.wait() until workspace:FindFirstChild(lp.Name) and lp.Character:FindFirstChild("Torso")
 	c = lp.Character
 	c:WaitForChild("Torso",999).ChildAdded:Connect(function(s)
 		if s.Name == "SPINNER" then
