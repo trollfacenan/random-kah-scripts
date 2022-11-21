@@ -3,17 +3,6 @@ local function chat(msg)
     chatbox:SetTextFromInput(msg)
     game.Players:Chat(msg)
 end
-function SC_Check() 
-	if game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("SCV2_ButtonList") or game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("ScV2_ButtonList") or game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("sCV2_ButtonList") or game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("scV2_ButtonList") then
-		return true
-	end
-	return false
-end
-if SC_Check() then
-	print("Delete Tool is incompatible with Shortcut v2.")
-	chat("//bmove")
-	return
-end	
 local random = true -- set this to false if you want to use custom delete position
 local customdeletepos = CFrame.new(-491323,783321,54662)
 local function ivory()
@@ -32,17 +21,17 @@ local function move(target)
 		task.wait(0.2)
 		lp.Character.IvoryPeriastron.Remote:FireServer(Enum.KeyCode.E)
 		local looping = true
-		spawn(function()
+		coroutine.wrap(function()
 			while true do
-				game:GetService('RunService').Heartbeat:wait()
+				game:GetService('RunService').RenderStepped:Wait()
 				game.Players.LocalPlayer.Character['Humanoid']:ChangeState(11)
 				target.RotVelocity = Vector3.new(0,0,0)
 		                target.Velocity = Vector3.new(0,0,0)
 				cf.CFrame = target.CFrame * CFrame.new(-1*(target.Size.X/2)-(p.LocalPlayer.Character['Torso'].Size.X/2), 0, 0)
 				if not looping then break end
 			end
-		end)
-		task.spawn(function() while looping do game:GetService('RunService').Heartbeat:wait() game:GetService("Players"):Chat('unpunish me') end end)
+		end)()
+		coroutine.wrap(function() while looping do game:GetService('RunService').Heartbeat:wait() game:GetService("Players"):Chat('unpunish me') end end)()
 		task.wait(0.3)
 		looping = false
 		lp.Character.IvoryPeriastron.Remote:FireServer(Enum.KeyCode.E)
