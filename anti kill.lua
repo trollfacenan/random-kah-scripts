@@ -1,9 +1,14 @@
 local lp = game:GetService("Players").LocalPlayer
 local plrs = lp.Parent
-game:GetService("RunService").Heartbeat:Connect(function()
+local chatbox = Instance.new("TextBox", workspace)
+local function chat(msg)
+    chatbox:SetTextFromInput(msg)
+    plrs:Chat(msg)
+end
+game:GetService("RunService").RenderStepped:Connect(function()
 	local char = lp.Character or lp.CharacterAdded:Wait()
-	repeat game:GetService("RunService").Heartbeat:Wait() until lp.Character:FindFirstChild("Humanoid")
+	repeat game:GetService("RunService").RenderStepped:Wait() until lp.Character:FindFirstChild("Humanoid")
 	if lp.Character:FindFirstChild("Humanoid") and lp.Character.Humanoid.Health == 0 then
-		plrs:Chat(":refresh me")
+		chat(":refresh me")
 	end
 end)
