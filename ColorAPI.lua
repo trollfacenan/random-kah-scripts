@@ -182,8 +182,8 @@ colorAPI.colorallOriginal = function()
 	task.wait(.6)
 	Chat("ungear me "..math.random(2069))
 end
-colorallOriginal = colorAPI.colorallOriginal
-colorAllOriginal = colorAPI.colorallOriginal
+colorAPI.colorallOriginal = colorAPI.colorallOriginal
+colorAPI.colorAllOriginal = colorAPI.colorallOriginal
 colorAPI.colorallRandom = function()
 	game:GetService("Players"):Chat("gear me 00000000000000000018474459")
 	task.wait(1)
@@ -201,5 +201,5 @@ colorAPI.colorallRandom = function()
 	game:GetService("RunService").Heartbeat:Wait()
 	Chat("unpaint me")
 end
-colorAllRandom = colorAPI.colorallRandom
-colorallRandom = colorAPI.colorallRandom
+colorAPIcolorAllRandom = colorAPI.colorallRandom
+colorAPI.colorallRandom = colorAPI.colorallRandom
