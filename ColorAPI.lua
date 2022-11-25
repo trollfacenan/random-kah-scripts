@@ -201,5 +201,5 @@ colorAPI.colorallRandom = function()
 	game:GetService("RunService").Heartbeat:Wait()
 	Chat("unpaint me")
 end
-colorAPIcolorAllRandom = colorAPI.colorallRandom
+colorAPI.colorAllRandom = colorAPI.colorallRandom
 colorAPI.colorallRandom = colorAPI.colorallRandom
