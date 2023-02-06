@@ -1,6 +1,6 @@
-local chatbox = Instance.new("TextBox", workspace)
+--local chatbox = Instance.new("TextBox", workspace)
 local function chat(msg)
-    chatbox:SetTextFromInput(msg)
+    --chatbox:SetTextFromInput(msg)
     game.Players:Chat(msg)
 end
 local random = true -- set this to false if you want to use custom delete position
