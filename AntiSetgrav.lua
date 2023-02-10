@@ -1,7 +1,7 @@
 local plr = game:GetService("Players")
 local lplr = plr.LocalPlayer
 local char = lplr.Character
-local connections
+local connections = {}
 lplr.CharacterAdded:Connect(function(it)
     for i,v in pairs(connections) do
         if v and v.Disconnect then
