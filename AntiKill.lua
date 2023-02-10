@@ -1,8 +1,6 @@
 local lp = game:GetService("Players").LocalPlayer
 local plrs = lp.Parent
-local chatbox = Instance.new("TextBox", workspace)
 local function chat(msg)
-    chatbox:SetTextFromInput(msg)
     plrs:Chat(msg)
 end
 game:GetService("RunService").RenderStepped:Connect(function()
