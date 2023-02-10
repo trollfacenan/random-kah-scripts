@@ -6,6 +6,7 @@ lplr.CharacterAdded:Connect(function(it)
     for i,v in pairs(connections) do
         if v and v.Disconnect then
             v:Disconnect()
+            connections[v] = nil
         end
     end        
     char = it
