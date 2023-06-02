@@ -1,11 +1,12 @@
--- fixed after a million years lmao
+-- original was deleted, so this is just a remake
+-- original by yeemi
 
 local chatbox = Instance.new("TextBox", workspace)
 local function chat(msg)
-    chatbox:SetTextFromInput(msg)
     game:GetService("Players"):Chat(msg)
 end
-local Chat
+task.wait()
+local Chat = chat
 colorAPI = {}
 local v1 = "PaintPart"
 local obbyBricks = workspace.Terrain._Game.Workspace.Obby:GetChildren()
@@ -15,7 +16,6 @@ local adminDivs = workspace.Terrain._Game.Workspace["Admin Dividers"]:GetChildre
 local bricks = workspace.Terrain._Game.Workspace["Building Bricks"]:GetChildren()
 local plrys = game:GetService("Players")
 
-Chat = chat
 colorAPI.transformToColor3 = function(BrickClr)
 	if typeof(BrickClr) == "BrickColor" then
 		return BrickClr.Color
@@ -60,7 +60,7 @@ colorAPI.colorHouse = function(Extra)
 			end
 		end))
 	end
-	colorAPI.color(workspace.Terrain["_Game"].Workspace["Basic House"].SmoothBlockModel40,Extra.baseC)
+	colorAPI.color(workspace.Terrain._Game.Workspace["Basic House"].SmoothBlockModel40,Extra.baseC)
 	colorAPI.color(workspace.Terrain._Game.Workspace["Basic House"].SmoothBlockModel112,Extra.floorC)
 end
 colorAPI.colorBuildingBricks = function(Extra)
@@ -186,7 +186,8 @@ colorAPI.colorallOriginal = colorAPI.colorallOriginal
 colorAPI.colorAllOriginal = colorAPI.colorallOriginal
 colorAPI.colorallRandom = function()
 	game:GetService("Players"):Chat("gear me 00000000000000000018474459")
-	task.wait(1)
+	repeat task.wait() until game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("PaintBucket")
+	repeat task.wait() until game:GetService("Players").LocalPlayer.Backpack.PaintBucket:FindFirstChild("Handle")
 	game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack.PaintBucket)
 	task.wait(.25)
 	for i,v in pairs(workspace:GetDescendants()) do
