@@ -16,6 +16,7 @@ game:GetService("RunService").RenderStepped:Connect(function()
 				if i2:IsA"Weld" or i2:IsA"Snap" then
 					chat(":refresh "..dsd.Parent.Parent.Name)
 				end
+				task.wait()
 			end
 		end
 	end
