@@ -7,7 +7,7 @@ end
 local part = workspace.Terrain._Game.Admin.Regen
 local looping = true
 local cf = lplr.Character.HumanoidRootPart
-chat("Hi-hi-hi, Mr. Gore")
+chat("yor ba*l")
 coroutine.wrap(function()
 	while true do
 		lplr.Character:FindFirstChildOfClass("Humanoid"):ChangeState(11)
