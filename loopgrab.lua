@@ -1,9 +1,11 @@
--- yup it will crash on krnl if ur punished or you are respawning without admin
 shared.loopgrabbing = false
+local c1
+local c2
+local c3
 local pads = workspace.Terrain._Game.Admin.Pads:GetChildren()
-game:GetService("RunService").RenderStepped:Connect(function()
+c1 = game:GetService("RunService").RenderStepped:Connect(function()
 	if shared.loopgrabbing == false then
-		wait(9e9)
+		c1:Disconnect()
 	end
 	for i, pad in pairs(pads) do
 		task.spawn(function()
@@ -13,9 +15,9 @@ game:GetService("RunService").RenderStepped:Connect(function()
 			end)
 	end
 end)
-game:GetService("RunService").Stepped:Connect(function()
+c2 = game:GetService("RunService").Stepped:Connect(function()
 	if shared.loopgrabbing == false then
-		wait(9e9)
+		c2:Disconenct()
 	end
 	for i, pad in pairs(pads) do
 		task.spawn(function()
@@ -25,9 +27,9 @@ game:GetService("RunService").Stepped:Connect(function()
 			end)
 	end
 end)
-game:GetService("RunService").Heartbeat:Connect(function()
+c3 = game:GetService("RunService").Heartbeat:Connect(function()
 	if shared.loopgrabbing == false then
-		wait(9e9)
+		c3:Disconnect()
 	end
 	for i, pad in pairs(pads) do
 		task.spawn(function()
