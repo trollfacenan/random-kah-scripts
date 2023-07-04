@@ -1,6 +1,6 @@
 -- copy the script, and then just run it
 local lplr = game:GetService("Players").LocalPlayer
-local char = workspace[lplr.Name]
+local char = lplr.Character
 local tor = char:WaitForChild("Torso")
 local oldvel = tor.Velocity
 tor.Changed:Connect(function()
@@ -11,7 +11,9 @@ end)
 tor.ChildAdded:Connect(function(v)
 	if v:IsA("BodyForce") then
 		v.Force = Vector3.new(0,0,0)
+		char:FindFirstChildOfClass("Humanoid").Sit = false
 		task.wait()
+		char:FindFirstChildOfClass("Humanoid").Sit = false
 		game:GetService("Debris"):AddItem(v,0)
 		repeat
 			game:GetService("RunService").RenderStepped:Wait()
@@ -23,8 +25,10 @@ lplr.CharacterAdded:Connect(function()
      oldvel = tor.Velocity
      tor.ChildAdded:Connect(function(v)
 	if v:IsA("BodyForce") then
-		v.Force = Vector3.new(0,0,0)
+		v.Force = Vector3.new(0, 0, 0)
+		char:FindFirstChildOfClass("Humanoid").Sit = false
 		task.wait()
+		char:FindFirstChildOfClass("Humanoid").Sit = false
 		game:GetService("Debris"):AddItem(v,0)
 		repeat
 			game:GetService("RunService").RenderStepped:Wait()
