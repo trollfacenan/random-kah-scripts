@@ -17,7 +17,7 @@ c1 = game:GetService("RunService").RenderStepped:Connect(function()
 end)
 c2 = game:GetService("RunService").Stepped:Connect(function()
 	if shared.loopgrabbing == false then
-		c2:Disconenct()
+		c2:Disconnect()
 	end
 	for i, pad in pairs(pads) do
 		task.spawn(function()
