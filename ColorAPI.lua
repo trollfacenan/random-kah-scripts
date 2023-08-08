@@ -23,15 +23,14 @@ colorAPI.transformToColor3 = function(BrickClr)
 end
 transformToColor3 = colorAPI.transformToColor3
 colorAPI.color = function(prt, clr)
-	local thread = coroutine.create(function()
+	coroutine.resume(coroutine.create(function()
 		local Arguments =
 			{
 				["Part"] = prt,
 				["Color"] = clr
 			}
 		plrys.LocalPlayer.Character.PaintBucket:WaitForChild("Remotes",15).ServerControls:InvokeServer("PaintPart", Arguments)
-	end)
-	coroutine.resume(thread)
+	end))
 end
 colorAPI.colorHouse = function(Extra)
 	local OutlinesAndWDWS = Extra.WANDDC
