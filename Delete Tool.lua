@@ -1,6 +1,5 @@
---yes ik this code is terrible bfdjbjajgpaje[j[rjhospdfzz;lohjmdh;\'
 local function chat(msg)
-    lplr:Chat(msg)
+    game:GetService("Players"):Chat(msg)
 end
 local random = true -- set this to false if you want to use custom delete position
 local customdeletepos = CFrame.new(-491323,783321,54662)
