@@ -14,7 +14,9 @@ hi = game:GetService("RunService").RenderStepped:Connect(function()
 			for i,i2 in pairs(plr.Character:GetDescendants()) do
 			        if v.Parent:IsA'Accoutrement' or v.Parent.Parent:IsA'Accoutrement' then continue end
 				if i2:IsA"Weld" and not i2.Name:lower():find"left" and not i2.Name:lower():find"right" and not i2.Name == "Neck" and not v.Parent.Name == "Handle" or i2:IsA"Snap" then
-					chat(":refresh "..dsd.Parent.Parent.Name)
+					chat(":refresh "..i2.Parent.Parent.Name)
+					task.wait()
+					chat("refresh "..i2.Parent.Parent.Parent.Name)
 				end
 				task.wait()
 			end
