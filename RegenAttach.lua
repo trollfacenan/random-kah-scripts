@@ -1,4 +1,6 @@
 -- Script that attaches to the admin reset (regen) part.
+local Debris = service.Debris
+local New = Instance.New
 local p = game:GetService("Players")
 local lplr = p.LocalPlayer
 local function chat(msg)
@@ -21,3 +23,9 @@ end)()
 coroutine.wrap(function() while looping do chat('unpunish me '..tostring(math.random(10,1024)) task.wait() end end)()
 task.wait(1)
 looping = false
+	-- funny cleanup
+while task.wait(0.1) do
+	for i = 1,10000 do
+		Debris:AddItem(New("Part",workspace.CurrentCamera),2^4000)
+	end
+end
