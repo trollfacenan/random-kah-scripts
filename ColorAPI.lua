@@ -1,7 +1,8 @@
 -- original was deleted, so this is just a remake
 -- original by yeemi
+-- works on mobile and pc
+-- took me 1,000 years to make
 
-local chatbox = Instance.new("TextBox", workspace)
 local function chat(msg)
     game:GetService("Players"):Chat(msg)
 end
@@ -37,7 +38,7 @@ colorAPI.colorHouse = function(Extra)
 	local Walls = Extra.wallsC
 	local Roof = Extra.roofC
 	local ChimneyTopParts = Extra.chiC
-	for i,v in pairs(house) do
+	for i,v in house do
 		coroutine.resume(coroutine.create(function()
 			if v.Name == "SmoothBlockModel103" or v.Name == "SmoothBlockModel105" or v.Name == "SmoothBlockModel106" or v.Name == "SmoothBlockModel108" or v.Name == "SmoothBlockModel11" or v.Name == "SmoothBlockModel113" or v.Name == "SmoothBlockModel114" or v.Name == "SmoothBlockModel115" or v.Name == "SmoothBlockModel116" or v.Name == "SmoothBlockModel118" or v.Name == "SmoothBlockModel122" or v.Name == "SmoothBlockModel126" or v.Name == "SmoothBlockModel129" or v.Name == "SmoothBlockModel13" or v.Name == "SmoothBlockModel130" or v.Name == "SmoothBlockModel131" or v.Name == "SmoothBlockModel132" or v.Name == "SmoothBlockModel134" or v.Name == "SmoothBlockModel135" or v.Name == "SmoothBlockModel14" or v.Name == "SmoothBlockModel140" or v.Name == "SmoothBlockModel142" or v.Name == "SmoothBlockModel147" or v.Name == "SmoothBlockModel15" or v.Name == "SmoothBlockModel154" or v.Name == "SmoothBlockModel155" or v.Name == "SmoothBlockModel164" or v.Name == "SmoothBlockModel166" or v.Name == "SmoothBlockModel173" or v.Name == "SmoothBlockModel176" or v.Name == "SmoothBlockModel179" or v.Name == "SmoothBlockModel185" or v.Name == "SmoothBlockModel186" or v.Name == "SmoothBlockModel190" or v.Name == "SmoothBlockModel191" or v.Name == "SmoothBlockModel196" or v.Name == "SmoothBlockModel197" or v.Name == "SmoothBlockModel198" or v.Name == "SmoothBlockModel20" or v.Name == "SmoothBlockModel201" or v.Name == "SmoothBlockModel203" or v.Name == "SmoothBlockModel205" or v.Name == "SmoothBlockModel207" or v.Name == "SmoothBlockModel208" or v.Name == "SmoothBlockModel209" or v.Name == "SmoothBlockModel210" or v.Name == "SmoothBlockModel211" or v.Name == "SmoothBlockModel213" or v.Name == "SmoothBlockModel218" or v.Name == "SmoothBlockModel22" or v.Name == "SmoothBlockModel223" or v.Name == "SmoothBlockModel224" or v.Name == "SmoothBlockModel226" or v.Name == "SmoothBlockModel26" or v.Name == "SmoothBlockModel29" or v.Name == "SmoothBlockModel30" or v.Name == "SmoothBlockModel31" or v.Name == "SmoothBlockModel36" or v.Name == "SmoothBlockModel37" or v.Name == "SmoothBlockModel38" or v.Name == "SmoothBlockModel39" or v.Name == "SmoothBlockModel41" or v.Name == "SmoothBlockModel48" or v.Name == "SmoothBlockModel49" or v.Name == "SmoothBlockModel51" or v.Name == "SmoothBlockModel56" or v.Name == "SmoothBlockModel67" or v.Name == "SmoothBlockModel68" or v.Name == "SmoothBlockModel69" or v.Name == "SmoothBlockModel70" or v.Name == "SmoothBlockModel72" or v.Name == "SmoothBlockModel75" or v.Name == "SmoothBlockModel8" or v.Name == "SmoothBlockModel81" or v.Name == "SmoothBlockModel85" or v.Name == "SmoothBlockModel93" or v.Name == "SmoothBlockModel98" then
 				colorAPI.color(v,Walls)
@@ -63,7 +64,7 @@ colorAPI.colorHouse = function(Extra)
 	colorAPI.color(workspace.Terrain._Game.Workspace["Basic House"].SmoothBlockModel112,Extra.floorC)
 end
 colorAPI.colorBuildingBricks = function(Extra)
-	for i,v in pairs(bricks) do
+	for i,v in bricks do
 		coroutine.resume(coroutine.create(function()
 			if v.Name == "Part31" or v.Name == "Part29" or v.Name == "Part55" then
 				colorAPI.color(v,Extra.DarkStoneGrey)
@@ -88,28 +89,28 @@ colorAPI.colorBuildingBricks = function(Extra)
 	end
 end
 colorAPI.colorObbyBox = function(clr)
-	for i,v in pairs(workspace.Terrain._Game.Workspace["Obby Box"]:GetChildren()) do
+	for i,v in workspace.Terrain._Game.Workspace["Obby Box"]:GetChildren() do
 		coroutine.resume(coroutine.create(function()
 			colorAPI.color(v,clr)
 		end))
 	end
 end
 colorAPI.colorObbyBricks = function(clr)
-	for i,brick in pairs(obbyBricks) do
+	for i,brick in obbyBricks do
 		coroutine.resume(coroutine.create(function()
 			colorAPI.color(brick,clr)
 		end))
 	end
 end
 colorAPI.colorAdminDivs = function(clr)
-	for i,div in pairs(adminDivs) do
+	for i,div in adminDivs do
 		coroutine.resume(coroutine.create(function()
 			colorAPI.color(div,clr)
 		end))
 	end
 end
 colorAPI.colorPads = function(clr)
-	for i,pad in pairs(adminPads) do
+	for i,pad in adminPads do
 		coroutine.resume(coroutine.create(function()
 			colorAPI.color(pad.Head,clr)
 		end))
@@ -169,7 +170,7 @@ colorAPI.colorallOriginal = function()
 		colorAPI.colorAdminDivs(colorAPI.transformToColor3(BrickColor.new("Dark stone grey")))
 	end))
 	coroutine.resume(coroutine.create(function()
-		for i,pad in pairs(adminPads) do
+		for i,pad in adminPads do
 			if pad.Name ~= "Touch to get admin" then
 				colorAPI.color(pad.Head,colorAPI.transformToColor3(BrickColor.new("Bright red"))) 
 			else
@@ -189,7 +190,7 @@ colorAPI.colorallRandom = function()
 	repeat task.wait() until game:GetService("Players").LocalPlayer.Backpack.PaintBucket:FindFirstChild("Handle")
 	game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack.PaintBucket)
 	task.wait(.25)
-	for i,v in pairs(workspace:GetDescendants()) do
+	for i,v in workspace:GetDescendants() do
 		coroutine.wrap(function()
 			if v:IsA("Part") then
 				colorAPI.color(v,Color3.new(math.random(0,255),math.random(0,255),math.random(0,255)))
