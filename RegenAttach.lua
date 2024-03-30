@@ -1,6 +1,6 @@
 -- Script that attaches to the admin reset (regen) part.
 local Debris = service.Debris
-local New = Instance.New
+local New = Instance.new
 local p = game:GetService("Players")
 local lplr = p.LocalPlayer
 local function chat(msg)
