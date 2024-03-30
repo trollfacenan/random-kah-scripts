@@ -1,3 +1,57 @@
+--really old but still better than quiving's btools
+--this gives you a delete tool that deletes anything you want
+--[[has:
+auto re-give tool after deleting something
+you can set your own position (i'd recommend random though, because it's harder to find)
+spaghetti code
+]]
+--works only on krampus (possibly wave?)
+
+
+
+
+
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+--WARNING: SPAGHETTI CODE
+local wait = task.wait
 local function chat(msg)
     game:GetService("Players"):Chat(msg)
 end
@@ -16,7 +70,7 @@ local function move(target)
 	if lp.Character:FindFirstChild("IvoryPeriastron") then
 		local cf = lp.Character.HumanoidRootPart
 		if not random == true then cf.CFrame = customdeletepos else cf.CFrame = CFrame.new(math.random(-800000,-100000),math.random(-980053,-123387),math.random(-768319,-492917)) end
-		task.wait(0.2)
+		wait(0.2)
 		lp.Character.IvoryPeriastron.Remote:FireServer(Enum.KeyCode.E)
 		local looping = true
 		coroutine.wrap(function()
@@ -29,11 +83,11 @@ local function move(target)
 				if not looping then break end
 			end
 		end)()
-		coroutine.wrap(function() while looping do game:GetService('RunService').Heartbeat:wait() game:GetService("Players"):Chat('unpunish me') end end)()
-		task.wait(0.3)
+		coroutine.wrap(function() while looping do wait() game:GetService("Players"):Chat('unpunish me') end end)()
+		wait(0.3)
 		looping = false
 		lp.Character.IvoryPeriastron.Remote:FireServer(Enum.KeyCode.E)
-		task.wait(0.1)
+		wait(0.1)
 		chat("respawn me")
 	end
 end
@@ -66,7 +120,7 @@ del.Equipped:Connect(function()
 		if m.Target and m.Target:IsA("BasePart") and not m.Target:IsDescendantOf(lp.Character) then
 			move(m.Target)
 		end
-		task.wait(0.2)
+		wait(0.2)
 		lp.Character.HumanoidRootPart.CFrame = old
 		local del = Instance.new("Tool")
 del.Name = "Delete"
@@ -96,7 +150,7 @@ del.Equipped:Connect(function()
 		if m.Target and m.Target:IsA("BasePart") and not m.Target:IsDescendantOf(lp.Character) then
 			move(m.Target)
 		end
-		task.wait(0.2)
+		wait(0.2)
 		lp.Character.HumanoidRootPart.CFrame = old
 				local del = Instance.new("Tool")
 				del.Name = "Delete"
@@ -121,12 +175,12 @@ del.Equipped:Connect(function()
 					b1p = m.Button1Up:Connect(function()
 						local old = lp.Character.HumanoidRootPart.CFrame
 						ivory()
-						task.wait(0.3)
+						wait(0.3)
 						equipivory()
 						if m.Target and m.Target:IsA("BasePart") and not m.Target:IsDescendantOf(lp.Character) then
 							move(m.Target)
 						end
-						task.wait(0.2)
+						wait(0.2)
 						lp.Character.HumanoidRootPart.CFrame = old
 					end)
 				end)
