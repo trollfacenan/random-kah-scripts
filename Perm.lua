@@ -1,2 +1,3 @@
 --obsolete.
 --there are already lots of much stronger perm scripts, and this was only strong in 2022...
+getconnections(game.Players.LocalPlayer.Character.Humanoid)
