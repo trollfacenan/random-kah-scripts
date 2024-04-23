@@ -1,4 +1,1 @@
-# random-kah-scripts
-random kohls admin house nbc/bc scripts that i made,
-game link for NBC: https://www.roblox.com/games/112420803/Kohls-Admin-House-NBC-Updated.
-game link for BC: https://www.roblox.com/games/115670532/Kohls-Admin-House-BC-Updated
+# Keep in mind that those scripts are 2+ years old and will no longer be maintained. It's recommended to use Shortcut @ discord.gg/kah for better experience.
