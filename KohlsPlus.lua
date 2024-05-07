@@ -276,7 +276,7 @@ end)
 local assets = workspace:FindFirstChildOfClass("Terrain"):WaitForChild("_Game")
 local pads = assets:WaitForChild("Pads")
 
-if actor_missing then
+if settingsTable.actor_missing then
 	game:GetService("RunService").Heartbeat:ConnectParallel(function(dt)
 		for i, v in settingsTable.banned do
 			if v:IsDescendantOf(game) and not v.Parent:IsA("Lighting") then
