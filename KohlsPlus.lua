@@ -33,7 +33,7 @@ if not game:GetService("RunService"):IsStudio() then
 	getgenv().syn = nil
 	if not run_on_actor then
 		script.Parent = Instance.new("Actor")
-		actor_missing = true
+		settingsTable.actor_missing = true
 	end
 end
 
