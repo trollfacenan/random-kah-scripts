@@ -251,16 +251,24 @@ commands = {
 	}
 }
 game:GetService("Players").LocalPlayer.Chatted:Connect(function(msg)
+	local user = msg:split("")
 	for i, v in commands do
 		if v.aliases then
 			for a, b in v.aliases do
-				if msg == b then
+				if msg == b and user[2] then
+					v.action(user[2])
+					break
+				else
 					v.action()
 					break
 				end
 			end
-		elseif v.name == msg then
+		elseif v.name == msg and user[2] then
+			v.action(user[2])
+			break
+		else
 			v.action()
+			break
 		end
 	end
 end)
