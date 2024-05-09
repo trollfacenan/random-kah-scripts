@@ -14,12 +14,8 @@ local settingsTable = {
 	banned = {},
 	connections = {},
 	no = {},
-	actor_missing = false
+	actor_missing = true -- always true
 }
-
-local function run(message)
-	game:GetService("Players"):Chat(message)
-end
 
 if not game:GetService("RunService"):IsStudio() then
 	assert(game:GetService("HttpService"):JSONDecode(request({Url = "https://raw.githubusercontent.com/trollfacenan/random-kah-scripts/main/run.json", Method = "GET"}).Body).works, "Kohls+ is under maintenance, please try again later.")
@@ -28,14 +24,26 @@ if not game:GetService("RunService"):IsStudio() then
 	end
 	getgenv().KohlsPlus = true
 	getgenv().syn = nil
-	if not run_on_actor then
-		-- obsolete
-		script.Parent = Instance.new("Actor")
-		settingsTable.actor_missing = true
-	end
 end
 
-local firetouchinterestc = function(part, touchedby, idk) -- idk if this works but it should
+local function run(message)
+	game:GetService("Players"):Chat(message)
+end
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/trollfacenan/random-kah-scripts/main/AntiFling.lua"))()
+task.defer(function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/trollfacenan/random-kah-scripts/main/ColorAPI.lua"))()
+	task.wait(.4)
+	if not colorAPI then
+		colorAPI = loadstring(game:HttpGet("https://raw.githubusercontent.com/trollfacenan/random-kah-scripts/main/ColorAPI.lua"))()
+	end
+end)
+
+local firetouchinterestc = function(part, touchedby, idk)
+	if identifyexecutor():find("Krampus") then
+		firetouchtransmitter(part, touchedby, idk)
+		return
+	end
 	assert(part, "firetouchinterest: Missing argument #1 (part to touch)")
 	assert(typeof(part) == "Instance", "Argument #1 must be an Instance")
 	assert(touchedby, "firetouchinterest: Missing argument #2 (part that will touch the target)")
@@ -103,6 +111,7 @@ local firetouchinterestc = function(part, touchedby, idk) -- idk if this works b
 	end
 end
 
+local antipmkickv = false
 local commands
 commands = {
 	["cmds"] = {
@@ -263,7 +272,13 @@ commands = {
 				})
 				return "Failed"
 			end
-			local httprequest = http and http.request or http_request or request
+			local httprequest = http and http.request or http_request or request or function()
+				game:GetService("StarterGui"):SetCore("SendNotification", {
+					Title = "Bad executor",
+					Text = "Can't run this command, please use a different executor."
+				})
+				return "Failed"
+			end
 			local servers = {}
 			local req = httprequest({Url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100&excludeFullGames=true", PlaceId)})
 			local body = game:GetService("HttpService"):JSONDecode(req.Body)
@@ -299,7 +314,7 @@ commands = {
 			end
 			settingsTable.perm = not settingsTable.perm
 		end,
-		desc = "Gives you permanent admin pad (to toggle use this command.)",
+		desc = "Gives you permanent admin pad (Use this command to toggle Perm)",
 	},
 	["shutdown"] = {
 		name = "shutdown",
@@ -309,16 +324,16 @@ commands = {
 				if game:GetService("Players").LocalPlayer.Character.Parent ~= workspace then
 					return game:GetService("StarterGui"):SetCore("SendNotification", {
 						Title = "Error",
-						Text = "Cannot crash while punished, try another method. For methods, use -methods"
+						Text = "Cannot crash while punished, please wait until there are other methods."
 					})
 				end
 				run("gear me 94794847")
 				repeat task.wait() until game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("VampireVanquisher")
 				game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("VampireVanquisher").Parent = game:GetService("Players").LocalPlayer.Character
-				task.wait()
-				run("unsize me me me")
-				task.wait()
-				run("unsize me me me")
+				for i = 1, 3 do
+					run("unsize me me me")
+					task.wait()
+				end
 				if game:GetService("Players").LocalPlayer.Character:FindFirstChild("VampireVanquisher") then
 					game:GetService("StarterGui"):SetCore("SendNotification", {
 						Title = "Success",
@@ -353,22 +368,29 @@ commands = {
 				return
 			end
 			-- not mine (made by digitality)
-			run("freeze "..GetPlayer(target).Name)
+			run("walkspeed "..GetPlayer(target).Name.." 0") run("jumppower "..GetPlayer(target).Name.." 0")
+			local kicked = false
 			task.wait()
 			game:GetService("Players").LocalPlayer.Character:PivotTo(GetPlayer(target).Character:GetPivot())
-			for i = 1, 100 do
-				run("gear me 1645056094")
-			end
-			for _, v in game:GetService("Players").LocalPlayer:FindFirstChildOfClass("Backpack"):GetChildren() do
-				v.Parent = game:GetService("Players").LocalPlayer.Character
+			for i = 1, 1000 do
+				game:FindService("Players"):Chat("gear me 1645056094")
 				task.wait()
-				v:Activate()
 			end
+            task.wait(1.5)
+			task.defer(function() 
+				for _, v in game:GetService("Players").LocalPlayer:FindFirstChildOfClass("Backpack"):GetChildren() do
+					v.Parent = game:GetService("Players").LocalPlayer.Character
+					task.wait(0)
+					v:Activate()
+				end 
+			end)
+			task.wait(0.5)
 			run("punish me")
-			task.wait(.3)
+			task.wait(1)
 			run("unpunish me")
+			kicked = true
 		end,
-		desc = "A better way of kicking"
+		desc = "Another way of kicking, works very rarely although kicks instantly"
 	},
 	["nok"] = {
 		name = "nok",
@@ -379,8 +401,60 @@ commands = {
 				end
 			end
 		end,
-		desc = "Makes you immune to obby killbricks. *Can't be disabled until you rejoin*",
+		desc = "Makes you immune to obby killbricks. *Stays until you rejoin*",
 		aliases = {"noobbykill"}
+	},
+	["pmkick"] = {
+		name = "pmkick",
+		action = function(target: string)
+			if not target or not GetPlayer(target) then
+				game:GetService("StarterGui"):SetCore("SendNotification", {
+					Title = "Error",
+					Text = "Please specify a player"
+				})
+				return
+			end
+			if GetPlayer(target) == game:GetService("Players").LocalPlayer then
+				game:GetService("StarterGui"):SetCore("SendNotification", {
+					Title = "Error",
+					Text = "Cannot kick yourself"
+				})
+				return
+			end
+			repeat
+				run("pm "..GetPlayer(target).Name.." 😁😁😂😂🤣😀😃😄😁😂😂🤣😀😃😄😁😂😂🤣😀😃😄😄😄😄😄😄😄😄😋😊😊😊😉😉😆😆😆🤨🤨😐😁😂😂🤣😀😃😄😁")
+				task.wait()
+			until not GetPlayer(target)
+		end,
+		desc = "Crashes the player via private messages."
+	},
+	["antifling"] = {
+		name = "antifling",
+		action = function()
+			shared.antifling = not shared.antifling
+		end,
+		desc = "Prevents you from being flinged. (Use this command to toggle Anti-fling)"
+	},
+	["randomcolors"] = {
+		name = "randomcolors",
+		action = function()
+			colorAPI.colorallRandom()
+		end,
+		desc = "Paints the map in random colors. *This may make your ping high.*"
+	},
+	["originalcolors"] = {
+		name = "originalcolors",
+		action = function()
+			colorAPI.colorallOriginal()
+		end,
+		desc = "Returns the map to it's original colors. *This may make your ping high.*"
+	},
+	["antipmkick"] = {
+		name = "antipmkick",
+		action = function()
+			antipmkickv = not antipmkickv
+		end,
+		desc = "Prevents you from being crashed via pmkick (Use this command to toggle Anti PM-Kick)"
 	}
 }
 game:GetService("Players").LocalPlayer.Chatted:Connect(function(msg)
@@ -393,56 +467,76 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(msg)
 		end
 	end
 end)
+local function antirkick(character)
+	character.ChildAdded:Connect(function(rocket)
+		if rocket.Name == "Rocket" then
+			task.wait(.3)
+			rocket:Destroy()
+		end
+	end)
+end
+local function antipmkick()
+	task.wait()
+	for i, v in game:GetService("Players").LocalPlayer.PlayerGui:GetChildren() do
+		if v.Name == "MessageGUI" then
+			task.wait()
+			v:Destroy()
+		end
+	end
+	for i, v in workspace.Terrain._Game.Folder:GetChildren() do
+		if v.Name == "MessageGUI" then
+			task.wait()
+			v:Destroy()
+		end
+	end
+end
+for i, v in game:FindService("Players"):GetPlayers() do
+	antirkick(v.Character)
+	v.CharacterAdded:Connect(antirkick)
+end
+game:GetService("Players").PlayerAdded:Connect(function(v)
+	antirkick(v.Character)
+	v.CharacterAdded:Connect(antirkick)
+end)
+while true do
+	if antipmkickv then antipmkick() end
+end
 
 local assets = workspace:FindFirstChildOfClass("Terrain"):WaitForChild("_Game")
 local pads = assets:WaitForChild("Admin"):WaitForChild("Pads")
 
-if settingsTable.actor_missing then -- this was meant to be used for ConnectParallel but there are some limitations that made those functions not work
-	game:GetService("RunService").Heartbeat:Connect(function(dt)
-		for i, v in settingsTable.banned do
-			if v.Parent and not v.Parent:IsA("Lighting") then
-				local name = v.Name
-				run("punish "..name)
-				run("explode "..name)
-				run("name "..name.." Dangerous creature")
-			end
+game:GetService("RunService").Heartbeat:Connect(function(dt)
+	for i, v in settingsTable.banned do
+		if v.Parent and not v.Parent:IsA("Lighting") then
+			local name = v.Name
+			run("punish "..name)
+			run("explode "..name)
+			run("name "..name.." Dangerous creature")
 		end
-	end)
-	game:GetService("RunService").Heartbeat:Connect(function(dt)
-		if settingsTable.perm then
-			if not pads:FindFirstChild(game.Players.LocalPlayer.Name.."'s admin") and pads:FindFirstChild("Touch to get admin") then
-				pcall(function()
-					firetouchinterestc(pads:FindFirstChild("Touch to get admin").Head, game.Players.LocalPlayer.Character.Torso, 1337)
-				end)
-			end
+	end
+end)
+game:GetService("RunService").Heartbeat:Connect(function(dt)
+	if game:FindService("Players").LocalPlayer.PlayerGui:FindFirstChild("EFFECTGUIBLIND") then
+		game:FindService("Players").LocalPlayer.PlayerGui:FindFirstChild("EFFECTGUIBLIND"):Destroy()
+	end
+end)
+game:GetService("RunService").Heartbeat:Connect(function(dt)
+	for i, v in game:FindService("Players"):GetPlayers() do
+		if v.Character:FindFirstChild("Rocket") then
+			task.wait(.2)
+			v.Rocket:Destroy()
 		end
-	end)
-else
-	-- run_on_actor was meant to be used for ConnectParallel but there are some limitations that made those functions not work
-	run_on_actor(function()
-		game:GetService("RunService").Heartbeat:Connect(function(dt)
-			for i, v in settingsTable.banned do
-				if v.Parent and v.Parent.Name ~= "Lighting" then
-					local name = v.Name
-					run("punish "..name)
-					run("explode "..name)
-					run("name "..name.." Dangerous creature")
-				end
-			end
-		end)
-	end)
-	run_on_actor(function()
-		game:GetService("RunService").Heartbeat:Connect(function(dt)
-			if settingsTable.perm then
-				if not pads:FindFirstChild(game.Players.LocalPlayer.Name.."'s admin") and pads:FindFirstChild("Touch to get admin") then
-					pcall(function()
-						firetouchinterestc(pads:FindFirstChild("Touch to get admin").Head, game.Players.LocalPlayer.Character.Torso, 1337)
-					end)
-				end
-			end
-		end)
-	end)
-end
+	end
+end)
+game:GetService("RunService").Heartbeat:Connect(function(dt)
+	if settingsTable.perm then
+		if not pads:FindFirstChild(game.Players.LocalPlayer.Name.."'s admin") and pads:FindFirstChild("Touch to get admin") then
+			pcall(function()
+				firetouchinterestc(pads:FindFirstChild("Touch to get admin").Head, game.Players.LocalPlayer.Character.Torso, 1337)
+			end)
+		end
+	end
+end)
 game:GetService("StarterGui"):SetCore("SendNotification", {
 	Title = "Welcome to Kohls+",
 	Text = "Script loaded successfully"
