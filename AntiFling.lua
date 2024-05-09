@@ -1,4 +1,5 @@
--- copy the script, and then just run it
+-- ⚠️this is not meant for use outside of scripts that provide custom commands for KAH.
+shared.antifling = false
 local lplr = game:GetService("Players").LocalPlayer
 local char = lplr.Character
 local tor = char:WaitForChild("Torso")
@@ -9,7 +10,7 @@ tor.Changed:Connect(function()
 	end
 end)
 tor.ChildAdded:Connect(function(v)
-	if v:IsA("BodyForce") then
+	if v:IsA("BodyForce") and shared.antifling then
 		v.Force = Vector3.new(0,0,0)
 		char:FindFirstChildOfClass("Humanoid").Sit = false
 		task.wait()
@@ -24,7 +25,7 @@ lplr.CharacterAdded:Connect(function()
      tor = lplr.Character:WaitForChild("Torso")
      oldvel = tor.Velocity
      tor.ChildAdded:Connect(function(v)
-	if v:IsA("BodyForce") then
+	if v:IsA("BodyForce") and shared.antifling then
 		v.Force = Vector3.new(0, 0, 0)
 		char:FindFirstChildOfClass("Humanoid").Sit = false
 		task.wait()
