@@ -121,13 +121,7 @@ colorAPI.colorRegen = function(clr)
 		colorAPI.color(workspace.Terrain._Game.Admin.Regen,clr)
 	end    
 end    
-colorAPI.colorPad = function(pad,clr)
-	if pad ~= nil and typeof(pad) == "Instance" then
-		coroutine.resume(coroutine.create(function()
-			colorAPI.color(pad,clr)
-		end))    
-	end
-end
+colorAPI.colorPad = colorAPI.color
 transformToColor3 = colorAPI.transformToColor3
 colorAPI.colorallOriginal = function()
 	Chat("gear me 00000000000000000018474459")
