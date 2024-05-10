@@ -437,7 +437,7 @@ commands = {
 			local player = GetPlayer(target).Name
 			-- This message is logged from SCV3-Var so credits to Tech (SCV3-Var developer)
 			recursive_loop(function()
-				run("pm "..player.." "..shared.pmstuff)
+				run("pm "..player.." "..shared.pmstuff2)
 			end)
 		end,
 		desc = "Crashes the player via private messages."
