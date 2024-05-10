@@ -269,6 +269,7 @@ commands = {
 					while task.wait() do -- cba to use .PlayerRemoving
 						if not game:GetService("Players"):FindFirstChild(name) then
 							settingsTable.connections["Kick"..name]:Disconnect()
+							settingsTable.connections["_Kick"..name]:Disconnect()
 							break
 						end
 					end
@@ -614,26 +615,18 @@ game:GetService("RunService").Heartbeat:Connect(function(dt)
 			run("punish "..name)
 			run("name "..name.." Dangerous creature")
 		end
-	end
-end)
-game:GetService("RunService").Heartbeat:Connect(function(dt)
-	if game:FindService("Players").LocalPlayer.PlayerGui:FindFirstChild("EFFECTGUIBLIND") then
-		game:FindService("Players").LocalPlayer.PlayerGui:FindFirstChild("EFFECTGUIBLIND"):Destroy()
-	end
-	for i, v in game:GetService("Players"):GetPlayers() do
 		if v.Character:FindFirstChild("VampireVanquisher") or v.Backpack:FindFirstChild("VampireVanquisher") then
 			local name = v.Name
 			run("ungear "..name)
 			run("pm "..name.." This gear is not allowed!")
 		end
-	end
-end)
-game:GetService("RunService").Heartbeat:Connect(function(dt)
-	for i, v in game:FindService("Players"):GetPlayers() do
 		if v.Character:FindFirstChild("Rocket") then
-			task.wait(.2)
-			v.Character.Rocket:Destroy()
+			task.defer(function() task.wait(.2)
+			v.Character.Rocket:Destroy() end)
 		end
+	end
+	if game:FindService("Players").LocalPlayer.PlayerGui:FindFirstChild("EFFECTGUIBLIND") then
+		game:FindService("Players").LocalPlayer.PlayerGui:FindFirstChild("EFFECTGUIBLIND"):Destroy()
 	end
 end)
 game:GetService("RunService").Heartbeat:Connect(function(dt)
