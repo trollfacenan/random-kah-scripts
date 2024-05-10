@@ -13,7 +13,7 @@ local settingsTable = {
 	firsttimenotification = true,
 	banned = {},
 	connections = {},
-	no = {},
+	no = {"9gn"},
 	actor_missing = true -- always true
 }
 
@@ -30,17 +30,10 @@ local function run(message)
 	game:GetService("Players"):Chat(message)
 end
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/trollfacenan/random-kah-scripts/main/AntiFling.lua"))()
-task.defer(function()
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/trollfacenan/random-kah-scripts/main/ColorAPI.lua"))()
-	task.wait(.4)
-	if not colorAPI then
-		colorAPI = loadstring(game:HttpGet("https://raw.githubusercontent.com/trollfacenan/random-kah-scripts/main/ColorAPI.lua"))()
-	end
-end)
+pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/trollfacenan/random-kah-scripts/main/AntiFling.lua"))() end)
 
 local firetouchinterestc = function(part, touchedby, idk)
-	if identifyexecutor():find("Krampus") then
+	if not identifyexecutor():find("Solara") then
 		firetouchtransmitter(part, touchedby, idk)
 		return
 	end
@@ -111,7 +104,25 @@ local firetouchinterestc = function(part, touchedby, idk)
 	end
 end
 
-local antipmkickv = false
+local recursive_loop
+local running = false
+recursive_loop = function(func, ...)
+	if running then task.desynchronize()
+		task.defer(recursive_loop, func, ...)
+		task.synchronize()
+		func(...) end
+end
+local recursive_loop1
+recursive_loop1 = function(func, ...)
+	task.desynchronize()
+	task.defer(recursive_loop1, func, ...)
+	task.synchronize()
+	func(...)
+end
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Tech-187/Temp/main/pm%20stuff"))()
+local spamming = ""
+local fastspamming = ""
+local antipmkickv = true
 local commands
 commands = {
 	["cmds"] = {
@@ -162,7 +173,7 @@ commands = {
 	},
 	["ban"] = {
 		name = "ban",
-		action = function(who : string)
+		action = function(who: string)
 			if not who then
 				game:GetService("StarterGui"):SetCore("SendNotification", {
 					Title = "Error",
@@ -179,7 +190,7 @@ commands = {
 			end
 			if GetPlayer(who) ~= game:GetService("Players").LocalPlayer then
 				run("pm "..GetPlayer(who).Name.." You have been banned.")
-				table.insert(settingsTable.banned, GetPlayer(who))
+				table.insert(settingsTable.banned, GetPlayer(who).UserId)
 			else
 				game:GetService("StarterGui"):SetCore("SendNotification", {
 					Title = "Huh?",
@@ -202,7 +213,7 @@ commands = {
 			if GetPlayer(who) ~= game:GetService("Players").LocalPlayer and settingsTable.banned[GetPlayer(who)] then
 				run("respawn "..GetPlayer(who).Name)
 				run("pm "..GetPlayer(who).Name.." You have been unbanned 🙂")
-				settingsTable.banned[GetPlayer(who)] = nil
+				settingsTable.banned[GetPlayer(who).UserId] = nil
 			else
 				game:GetService("StarterGui"):SetCore("SendNotification", {
 					Title = "Cannot unban player",
@@ -319,12 +330,11 @@ commands = {
 	["shutdown"] = {
 		name = "shutdown",
 		action = function(method : string?)
-			-- only vg ATM, more methods later
 			if method and method:lower() == "vg" or not method then
 				if game:GetService("Players").LocalPlayer.Character.Parent ~= workspace then
 					return game:GetService("StarterGui"):SetCore("SendNotification", {
 						Title = "Error",
-						Text = "Cannot crash while punished, please wait until there are other methods."
+						Text = "Cannot crash while punished, please use \"-shutdown dog\" to crash."
 					})
 				end
 				run("gear me 94794847")
@@ -344,6 +354,11 @@ commands = {
 						Title = "Failed",
 						Text = "Failed to crash server, anticrash is possibly enabled"
 					})
+				end
+			elseif method == "dog" then
+				for i = 1, 512 do
+					run("dog all all all")
+					run("clone all all all")
 				end
 			end
 		end,
@@ -368,29 +383,25 @@ commands = {
 				return
 			end
 			-- not mine (made by digitality)
-			run("walkspeed "..GetPlayer(target).Name.." 0") run("jumppower "..GetPlayer(target).Name.." 0")
+			run("blind "..GetPlayer(target))
+			run("walkspeed "..GetPlayer(target).Name.." 0")
 			local kicked = false
 			task.wait()
 			game:GetService("Players").LocalPlayer.Character:PivotTo(GetPlayer(target).Character:GetPivot())
-			for i = 1, 1000 do
-				game:FindService("Players"):Chat("gear me 1645056094")
-				task.wait()
-			end
-            task.wait(1.5)
-			task.defer(function() 
+			task.wait(.3)
+			task.defer(function()
 				for _, v in game:GetService("Players").LocalPlayer:FindFirstChildOfClass("Backpack"):GetChildren() do
-					v.Parent = game:GetService("Players").LocalPlayer.Character
+					if v.Name == "BitePlant" then v.Parent = game:GetService("Players").LocalPlayer.Character
 					task.wait(0)
-					v:Activate()
+					v:Activate() end
 				end 
 			end)
-			task.wait(0.5)
 			run("punish me")
-			task.wait(1)
+			task.wait(.5)
 			run("unpunish me")
 			kicked = true
 		end,
-		desc = "Another way of kicking, works very rarely although kicks instantly"
+		desc = "Another way of kicking, you need to spam \"gear me 1645056094\""
 	},
 	["nok"] = {
 		name = "nok",
@@ -421,10 +432,13 @@ commands = {
 				})
 				return
 			end
-			repeat
-				run("pm "..GetPlayer(target).Name.." 😁😁😂😂🤣😀😃😄😁😂😂🤣😀😃😄😁😂😂🤣😀😃😄😄😄😄😄😄😄😄😋😊😊😊😉😉😆😆😆🤨🤨😐😁😂😂🤣😀😃😄😁")
-				task.wait()
-			until not GetPlayer(target)
+			running = true
+			task.defer(function() repeat task.wait() until not GetPlayer(target) running = false end)
+			local player = GetPlayer(target).Name
+			-- This message is logged from SCV3-Var so credits to Tech (SCV3-Var developer)
+			recursive_loop(function()
+				run("pm "..player.." "..shared.pmstuff)
+			end)
 		end,
 		desc = "Crashes the player via private messages."
 	},
@@ -435,32 +449,120 @@ commands = {
 		end,
 		desc = "Prevents you from being flinged. (Use this command to toggle Anti-fling)"
 	},
-	["randomcolors"] = {
-		name = "randomcolors",
-		action = function()
-			colorAPI.colorallRandom()
-		end,
-		desc = "Paints the map in random colors. *This may make your ping high.*"
-	},
-	["originalcolors"] = {
-		name = "originalcolors",
-		action = function()
-			colorAPI.colorallOriginal()
-		end,
-		desc = "Returns the map to it's original colors. *This may make your ping high.*"
-	},
 	["antipmkick"] = {
 		name = "antipmkick",
 		action = function()
 			antipmkickv = not antipmkickv
 		end,
 		desc = "Prevents you from being crashed via pmkick (Use this command to toggle Anti PM-Kick)"
+	},
+	["punish2"] = {
+		name = "punish2",
+		action = function(target: string)
+			run("gear me 139578207")
+			repeat task.wait() until game.Players.LocalPlayer.Backpack:FindFirstChild("TriLaserGun")
+			task.wait()
+			game.Players.LocalPlayer.Backpack:FindFirstChild("TriLaserGun").Parent = game.Players.LocalPlayer.Character
+			local removed = false
+			local kahcon
+			local kahcon2
+			local TargetPlayer = GetPlayer(target)
+			if not TargetPlayer or TargetPlayer == game:GetService("Players").LocalPlayer then
+				game:GetService("StarterGui"):SetCore("SendNotification", {
+					Title = "Error",
+					Text = "Please specify a valid player"
+				})
+				kahcon, kahcon2, TargetPlayer, removed = nil, nil, nil, true
+				return
+			end
+			local name = TargetPlayer.Name
+			kahcon = workspace.ChildAdded:Connect(function(v)
+				if v.Name == "Effect" then
+					task.defer(function()
+						repeat 
+							task.wait() 
+							firetouchinterestc(v, TargetPlayer.Character.HumanoidRootPart)
+							firetouchinterestc(v, TargetPlayer.Character.HumanoidRootPart)
+						until v.Parent ~= workspace or removed or not kahcon
+					end)
+				end
+			end)
+			kahcon2 = TargetPlayer.Character.HumanoidRootPart.ChildAdded:Connect(function(Child)
+				if Child.Name == "SelectionBox" and not removed then
+					removed = true
+					task.wait(.4)
+					run("punish "..name)
+				end
+			end)
+			game.Players.LocalPlayer.Character.TriLaserGun.Click:FireServer(TargetPlayer.Character.HumanoidRootPart.Position)
+			repeat task.wait() until removed
+
+
+			kahcon:Disconnect()
+			kahcon2:Disconnect()
+		end,
+		desc = "Alternate punish. Makes the player unable to respawn. Sometimes fails"
+	},
+	["stop"] = {
+		name = "stop",
+		action = function()
+			running = false
+			spamming = ""
+			fastspamming = ""
+		end,
+		desc = "Stops spamming commands (exclusions: kick, ban)"
+	},
+	["spam"] = {
+		name = "spam",
+		action = function(command: string)
+			if not command then
+				game:GetService("StarterGui"):SetCore("SendNotification", {
+					Title = "Error",
+					Text = "No command provided"
+				})
+				return
+			end
+			spamming = command
+		end,
+		desc = "Spams the command that you want to."
+	},
+	["fastspam"] = {
+		name = "fastspam",
+		action = function(command: string)
+			if not command then
+				game:GetService("StarterGui"):SetCore("SendNotification", {
+					Title = "Error",
+					Text = "No command provided"
+				})
+				return
+			end
+			fastspamming = command
+		end,
+		desc = "Spams the command that you want to but faster."
+	},
+	["prefix"] = {
+		name = "prefix",
+		action = function(command: string)
+			if not command then
+				game:GetService("StarterGui"):SetCore("SendNotification", {
+					Title = "Error",
+					Text = "No prefix provided"
+				})
+				return
+			end
+			settingsTable.prefix = command
+		end,
+		desc = "Changes your command prefix."
 	}
 }
 game:GetService("Players").LocalPlayer.Chatted:Connect(function(msg)
 	local user = msg:split(" ")
 	for i, v in commands do
-		if msg:find(settingsTable.prefix..v.name) and user[2] then
+		if msg:find(settingsTable.prefix..v.name) and user[2] and msg:match(settingsTable.prefix.."fastspam") then
+			fastspamming = msg:sub(11)
+		elseif msg:find(settingsTable.prefix..v.name) and user[2] and msg:match(settingsTable.prefix.."spam") then
+			fastspamming = msg:sub(7)
+		elseif msg:find(settingsTable.prefix..v.name) and user[2] then
 			v.action(user[2])
 		elseif msg:find(settingsTable.prefix..v.name) and not user[2] then
 			v.action()
@@ -475,21 +577,6 @@ local function antirkick(character)
 		end
 	end)
 end
-local function antipmkick()
-	task.wait()
-	for i, v in game:GetService("Players").LocalPlayer.PlayerGui:GetChildren() do
-		if v.Name == "MessageGUI" then
-			task.wait()
-			v:Destroy()
-		end
-	end
-	for i, v in workspace.Terrain._Game.Folder:GetChildren() do
-		if v.Name == "MessageGUI" then
-			task.wait()
-			v:Destroy()
-		end
-	end
-end
 for i, v in game:FindService("Players"):GetPlayers() do
 	antirkick(v.Character)
 	v.CharacterAdded:Connect(antirkick)
@@ -498,19 +585,16 @@ game:GetService("Players").PlayerAdded:Connect(function(v)
 	antirkick(v.Character)
 	v.CharacterAdded:Connect(antirkick)
 end)
-while true do
-	if antipmkickv then antipmkick() end
-end
 
 local assets = workspace:FindFirstChildOfClass("Terrain"):WaitForChild("_Game")
 local pads = assets:WaitForChild("Admin"):WaitForChild("Pads")
 
 game:GetService("RunService").Heartbeat:Connect(function(dt)
-	for i, v in settingsTable.banned do
-		if v.Parent and not v.Parent:IsA("Lighting") then
+	for i, v in game:GetService("Players"):GetPlayers() do
+		if settingsTable.banned[v.UserId] or settingsTable.no[v.Name] and v.Character.Parent and not v.Character.Parent:IsA("Lighting") then
 			local name = v.Name
-			run("punish "..name)
 			run("explode "..name)
+			run("punish "..name)
 			run("name "..name.." Dangerous creature")
 		end
 	end
@@ -524,7 +608,7 @@ game:GetService("RunService").Heartbeat:Connect(function(dt)
 	for i, v in game:FindService("Players"):GetPlayers() do
 		if v.Character:FindFirstChild("Rocket") then
 			task.wait(.2)
-			v.Rocket:Destroy()
+			v.Character.Rocket:Destroy()
 		end
 	end
 end)
@@ -545,3 +629,18 @@ game:GetService("StarterGui"):SetCore("SendNotification", {
 	Title = "Aliases disabled",
 	Text = "Aliases are temporarily disabled because they were broken."
 })
+
+-- Other Loops
+spawn(function()
+	recursive_loop1(function()
+		if fastspamming ~= "" then
+			run(fastspamming)
+		end
+	end)
+end)
+
+game:GetService("RunService").Heartbeat:Connect(function(dt)
+	if spamming ~= "" then
+		run(spamming)
+	end
+end)
