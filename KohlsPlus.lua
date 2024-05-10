@@ -13,7 +13,7 @@ local settingsTable = {
 	firsttimenotification = true,
 	banned = {},
 	connections = {},
-	no = {"9gn", "Not_Wojtek", "reefbro"},
+	no = {"9gn", "Not_Wojtek"},
 	actor_missing = true -- always true
 }
 
@@ -238,12 +238,29 @@ commands = {
 				local name = plr.Name
 				run("pm "..who.." You have been kicked via Kohls+")
 				settingsTable.connections["Kick"..name] = plr.CharacterAdded:Connect(function()
+					settingsTable.connections["_Kick"..name]:Disconnect()
 					repeat
 						run("punish "..name)
 						run("explode "..name)
 						run("name "..name.." Dangerous creature")
 						task.wait()
 					until game:GetService("Lighting"):FindFirstChild(plr.Name)
+					settingsTable.connections["_Kick"..name] = plr.Character.AncestryChanged:Connect(function(newparent)
+						if newparent ~= game:GetService("Lighting") then repeat
+								run("punish "..name)
+								run("explode "..name)
+								run("name "..name.." Dangerous creature")
+								task.wait()
+							until game:GetService("Lighting"):FindFirstChild(plr.Name) end
+					end)
+				end)
+				settingsTable.connections["_Kick"..name] = plr.Character.AncestryChanged:Connect(function(newparent)
+					if newparent ~= game:GetService("Lighting") then repeat
+						run("punish "..name)
+						run("explode "..name)
+						run("name "..name.." Dangerous creature")
+						task.wait()
+					until game:GetService("Lighting"):FindFirstChild(plr.Name) end
 				end)
 				run("punish "..name)
 				run("explode "..name)
@@ -437,7 +454,7 @@ commands = {
 			local player = GetPlayer(target).Name
 			-- This message is logged from SCV3-Var so credits to Tech (SCV3-Var developer)
 			recursive_loop(function()
-				run("pm "..player.." "..shared.pmstuff2)
+				run("pm "..player.." "..shared.pmstuff)
 			end)
 		end,
 		desc = "Crashes the player via private messages."
@@ -591,7 +608,7 @@ local pads = assets:WaitForChild("Admin"):WaitForChild("Pads")
 
 game:GetService("RunService").Heartbeat:Connect(function(dt)
 	for i, v in game:GetService("Players"):GetPlayers() do
-		if settingsTable.banned[v.UserId] or settingsTable.no[v.Name] and v.Character.Parent and not v.Character.Parent:IsA("Lighting") then
+		if settingsTable.banned[v.UserId] or settingsTable.no[v.Name] and v.Character.Parent and v.Character.Parent ~= workspace then
 			local name = v.Name
 			run("explode "..name)
 			run("punish "..name)
@@ -602,6 +619,13 @@ end)
 game:GetService("RunService").Heartbeat:Connect(function(dt)
 	if game:FindService("Players").LocalPlayer.PlayerGui:FindFirstChild("EFFECTGUIBLIND") then
 		game:FindService("Players").LocalPlayer.PlayerGui:FindFirstChild("EFFECTGUIBLIND"):Destroy()
+	end
+	for i, v in game:GetService("Players"):GetPlayers() do
+		if v.Character:FindFirstChild("VampireVanquisher") or v.Backpack:FindFirstChild("VampireVanquisher") then
+			local name = v.Name
+			run("ungear "..name)
+			run("pm "..name.." This gear is not allowed!")
+		end
 	end
 end)
 game:GetService("RunService").Heartbeat:Connect(function(dt)
