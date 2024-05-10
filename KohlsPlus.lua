@@ -13,7 +13,7 @@ local settingsTable = {
 	firsttimenotification = true,
 	banned = {},
 	connections = {},
-	no = {"9gn", "Not_Wojtek", "IHaveNoLifePF", "reefbro"},
+	no = {"9gn", "Not_Wojtek", "reefbro"},
 	actor_missing = true -- always true
 }
 
