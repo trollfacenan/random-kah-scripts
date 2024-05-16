@@ -1,56 +1,3 @@
---really old but still better than quiving's btools
---this gives you a delete tool that deletes anything you want
---[[has:
-auto re-give tool after deleting something
-you can set your own position (i'd recommend random though, because it's harder to find)
-spaghetti code
-]]
---works only on krampus (possibly wave?)
-
-
-
-
-
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
---WARNING: SPAGHETTI CODE
 local wait = task.wait
 local function chat(msg)
     game:GetService("Players"):Chat(msg)
@@ -70,7 +17,8 @@ local function move(target)
 	if lp.Character:FindFirstChild("IvoryPeriastron") then
 		local cf = lp.Character.HumanoidRootPart
 		if not random == true then cf.CFrame = customdeletepos else cf.CFrame = CFrame.new(math.random(-800000,-100000),math.random(-980053,-123387),math.random(-768319,-492917)) end
-		wait(0.2)
+		repeat wait() until lp.Character:FindFirstChild("IvoryPeriastron")
+		repeat wait() until lp.Character:FindFirstChild("IvoryPeriastron"):FindFirstChild("Remote")
 		lp.Character.IvoryPeriastron.Remote:FireServer(Enum.KeyCode.E)
 		local looping = true
 		coroutine.wrap(function()
