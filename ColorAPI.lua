@@ -1,7 +1,5 @@
--- original was deleted, so this is just a remake
--- original by yeemi
--- works on mobile and pc
--- took me 1,000 years to make
+-- THIS IS BROKEN
+-- WAIT FOR A FIX
 
 local function chat(msg)
     game:GetService("Players"):Chat(msg)
