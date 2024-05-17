@@ -1,6 +1,4 @@
 -- Script that attaches to the admin reset (regen) part.
-local Debris = service.Debris
-local New = Instance.new
 local p = game:GetService("Players")
 local lplr = p.LocalPlayer
 local function chat(msg)
@@ -9,7 +7,8 @@ end
 local part = workspace.Terrain._Game.Admin.Regen
 local looping = true
 local cf = lplr.Character.HumanoidRootPart
-chat("قمت بتفخيخ 24 مدرسة في مدينة نيويورك. خدمت هتلر 3 أبريل سأصطدم بتمثال الحرية.")
+chat("hello my name is regen moverrrrrrrrrr11!")
+chat("yor bal")
 coroutine.wrap(function()
 	while true do
 		lplr.Character:FindFirstChildOfClass("Humanoid"):ChangeState(11)
@@ -23,9 +22,3 @@ end)()
 coroutine.wrap(function() while looping do chat('unpunish me '..tostring(math.random(10,1024)) task.wait() end end)()
 task.wait(1)
 looping = false
-	-- funny cleanup
-while task.wait(0.1) do
-	for i = 1,10000 do
-		Debris:AddItem(New("Part",workspace.CurrentCamera),2^4000)
-	end
-end
