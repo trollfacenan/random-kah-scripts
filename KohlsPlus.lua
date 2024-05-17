@@ -5,7 +5,7 @@ local function cacherepo(repo, file)
 		writefile(file, game:HttpGet(repo))
 	end
 	local runfile = loadfile or dofile or readfile and function(fil3)
-		loadstring(readfile(fil3))
+		loadstring(readfile(fil3))()
 	end
 	runfile(file)
 end
