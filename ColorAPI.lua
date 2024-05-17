@@ -1,8 +1,47 @@
--- THIS IS BROKEN
--- WAIT FOR A FIX
+-- how to use:
+--[[
+	colorAPI.color - Paints a part in the color that you want
+	Usage:
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/trollfacenan/random-kah-scripts/main/ColorAPI.lua"))()
+		color(workspace.Baseplate, Color3.new(1, 1, 1))
+
+	colorAPI.colorHouse - Paints the house in a color that you want
+	Usage:
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/trollfacenan/random-kah-scripts/main/ColorAPI.lua"))()
+		colorHouse(workspace.Baseplate, {
+			wallsC = colorAPI.transformToColor3(BrickColor.new("Brick yellow")),
+			baseC = colorAPI.transformToColor3(BrickColor.new("Bright green")),
+			roofC = colorAPI.transformToColor3(BrickColor.new("Bright red")),
+			WANDDC = colorAPI.transformToColor3(BrickColor.new("Dark orange")),
+			stairsC = colorAPI.transformToColor3(BrickColor.new("Dark stone grey")),
+			floorC = colorAPI.transformToColor3(BrickColor.new("Medium blue")),
+			rooftsC = colorAPI.transformToColor3(BrickColor.new("Reddish brown")),
+			chiC = colorAPI.transformToColor3(BrickColor.new("Sand red"))
+		})
+		Where wallsC are walls, baseC is the grass, roofC is the roof, WANDDC are the windows and outlines, stairsC are the stairs to enter the house,
+		floorC is the floor, rooftsC are roofts, chiC is chimney top parts.
+
+	colorAPI.colorBuildingBricks - paints the building bricks
+	Usage is the same as colorHouse
+	Arguments used:
+		DarkStoneGrey = colorAPI.transformToColor3(BrickColor.new("Color")),
+		DeepBlue = colorAPI.transformToColor3(BrickColor.new("Color")),
+		NY = colorAPI.transformToColor3(BrickColor.new("Color")),
+		IW = colorAPI.transformToColor3(BrickColor.new("Color")),
+		LimeGreen = colorAPI.transformToColor3(BrickColor.new("Color")),
+		MSG = colorAPI.transformToColor3(BrickColor.new("Color")),
+		RB = colorAPI.transformToColor3(BrickColor.new("Color")),
+		TP = colorAPI.transformToColor3(BrickColor.new("Color")),
+		RR = colorAPI.transformToColor3(BrickColor.new("Color"))
+
+	For colorObbyBox and etc you just provide the BrickColor.
+
+	colorAPI.fixPaint - Paints everything back to default
+	colorAPI.randomColors - Paints everything in random colors
+]]
 
 local function chat(msg)
-    game:GetService("Players"):Chat(msg)
+	game:GetService("Players"):Chat(msg)
 end
 task.wait()
 local Chat = chat
@@ -18,18 +57,19 @@ local plrys = game:GetService("Players")
 colorAPI.transformToColor3 = function(BrickClr)
 	if typeof(BrickClr) == "BrickColor" then
 		return BrickClr.Color
+	else
+		warn(debug.traceback("not a BrickColor!", 2))
+		return Color3.new(1, 1, 1)
 	end
 end
 transformToColor3 = colorAPI.transformToColor3
 colorAPI.color = function(prt, clr)
-	coroutine.resume(coroutine.create(function()
-		local Arguments =
-			{
-				["Part"] = prt,
-				["Color"] = clr
-			}
-		plrys.LocalPlayer.Character.PaintBucket:WaitForChild("Remotes",15).ServerControls:InvokeServer("PaintPart", Arguments)
-	end))
+	task.defer(function()
+		plrys.LocalPlayer.Character.PaintBucket:WaitForChild("Remotes",15).ServerControls:InvokeServer("PaintPart", {
+			["Part"] = prt,
+			["Color"] = clr
+		})
+	end)
 end
 colorAPI.colorHouse = function(Extra)
 	local OutlinesAndWDWS = Extra.WANDDC
@@ -63,7 +103,7 @@ colorAPI.colorHouse = function(Extra)
 end
 colorAPI.colorBuildingBricks = function(Extra)
 	for i,v in bricks do
-		coroutine.resume(coroutine.create(function()
+		task.defer(function()
 			if v.Name == "Part31" or v.Name == "Part29" or v.Name == "Part55" then
 				colorAPI.color(v,Extra.DarkStoneGrey)
 			elseif v.Name == "Part43" or v.Name == "Part3" or v.Name == "Part25" or v.Name == "Part18" or v.Name == "Part11" then
@@ -83,50 +123,51 @@ colorAPI.colorBuildingBricks = function(Extra)
 			else
 				colorAPI.color(v,Extra.MSG)
 			end
-		end))
+		end)
 	end
 end
 colorAPI.colorObbyBox = function(clr)
 	for i,v in workspace.Terrain._Game.Workspace["Obby Box"]:GetChildren() do
-		coroutine.resume(coroutine.create(function()
+		task.defer(function()
 			colorAPI.color(v,clr)
-		end))
+		end)
 	end
 end
 colorAPI.colorObbyBricks = function(clr)
 	for i,brick in obbyBricks do
-		coroutine.resume(coroutine.create(function()
+		task.defer(function()
 			colorAPI.color(brick,clr)
-		end))
+		end)
 	end
 end
 colorAPI.colorAdminDivs = function(clr)
 	for i,div in adminDivs do
-		coroutine.resume(coroutine.create(function()
+		task.defer(function()
 			colorAPI.color(div,clr)
-		end))
+		end)
 	end
 end
 colorAPI.colorPads = function(clr)
 	for i,pad in adminPads do
-		coroutine.resume(coroutine.create(function()
+		task.defer(function()
 			colorAPI.color(pad.Head,clr)
-		end))
+		end)
 	end
 end
 colorAPI.colorRegen = function(clr)
 	if workspace.Terrain._Game.Admin:FindFirstChild("Regen") then
 		colorAPI.color(workspace.Terrain._Game.Admin.Regen,clr)
 	end    
-end    
-colorAPI.colorPad = colorAPI.color
+end
 transformToColor3 = colorAPI.transformToColor3
-colorAPI.colorallOriginal = function()
+
+colorAPI.fixPaint = function()
 	Chat("gear me 00000000000000000018474459")
-	repeat task.wait(.1) until plrys.LocalPlayer.Backpack:FindFirstChild("PaintBucket")
+	repeat task.wait() until plrys.LocalPlayer.Backpack:FindFirstChild("PaintBucket")
+	repeat task.wait() until plrys.LocalPlayer.Backpack:FindFirstChild("PaintBucket"):FindFirstChild("Handle")
 	plrys.LocalPlayer.Character.Humanoid:EquipTool(plrys.LocalPlayer.Backpack.PaintBucket)
 	task.wait(.28)
-	coroutine.resume(coroutine.create(function()
+	task.defer(function()
 		colorAPI.colorHouse({
 			wallsC = colorAPI.transformToColor3(BrickColor.new("Brick yellow")),
 			baseC = colorAPI.transformToColor3(BrickColor.new("Bright green")),
@@ -137,8 +178,8 @@ colorAPI.colorallOriginal = function()
 			rooftsC = colorAPI.transformToColor3(BrickColor.new("Reddish brown")),
 			chiC = colorAPI.transformToColor3(BrickColor.new("Sand red"))
 		})
-	end))
-	coroutine.resume(coroutine.create(function()
+	end)
+	task.defer(function()
 		colorAPI.colorBuildingBricks({
 			DarkStoneGrey = colorAPI.transformToColor3(BrickColor.new("Dark stone grey")),
 			DeepBlue = colorAPI.transformToColor3(BrickColor.new("Deep blue")),
@@ -150,7 +191,7 @@ colorAPI.colorallOriginal = function()
 			TP = colorAPI.transformToColor3(BrickColor.new("Toothpaste")),
 			RR = colorAPI.transformToColor3(BrickColor.new("Really red"))
 		})
-	end))
+	end)
 	colorAPI.color(workspace.Terrain._Game.Workspace.Baseplate,colorAPI.transformToColor3(BrickColor.new("Bright green")))
 	coroutine.resume(coroutine.create(function()
 		colorAPI.colorObbyBox(colorAPI.transformToColor3(BrickColor.new("Teal")))
@@ -172,27 +213,27 @@ colorAPI.colorallOriginal = function()
 	end))
 	colorAPI.colorRegen(colorAPI.transformToColor3(BrickColor.new("Bright violet")))
 	task.wait(.6)
-	Chat("ungear me "..math.random(2069))
+	Chat("ungear me fuck")
 end
-colorAPI.colorallOriginal = colorAPI.colorallOriginal
-colorAPI.colorAllOriginal = colorAPI.colorallOriginal
-colorAPI.colorallRandom = function()
+colorAPI.colorAllOriginal = colorAPI.fixPaint
+colorAPI.colorAllDefault = colorAPI.fixPaint
+
+colorAPI.randomColors = function()
 	game:GetService("Players"):Chat("gear me 00000000000000000018474459")
 	repeat task.wait() until game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("PaintBucket")
 	repeat task.wait() until game:GetService("Players").LocalPlayer.Backpack.PaintBucket:FindFirstChild("Handle")
 	game.Players.LocalPlayer.Character.Humanoid:EquipTool(game.Players.LocalPlayer.Backpack.PaintBucket)
 	task.wait(.25)
 	for i,v in workspace:GetDescendants() do
-		coroutine.wrap(function()
+		task.defer(function()
 			if v:IsA("Part") then
 				colorAPI.color(v,Color3.new(math.random(0,255),math.random(0,255),math.random(0,255)))
 			end
-		end)()
+		end)
 	end
 	task.wait(.4)
 	Chat("ungear me")
 	game:GetService("RunService").Heartbeat:Wait()
 	Chat("unpaint me")
 end
-colorAPI.colorAllRandom = colorAPI.colorallRandom
-colorAPI.colorallRandom = colorAPI.colorallRandom
+colorAPI.colorAllRandom = colorAPI.randomColors
