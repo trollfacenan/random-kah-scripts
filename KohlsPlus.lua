@@ -21,7 +21,7 @@ local function GetPlayer(text)
 	end
 end
 local settingsTable = {
-	perm = not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game:GetService("Players").LocalPlayer, 66254), -- this is not the gamepass checker, it's for the pad grabber
+	perm = not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(66254, game:GetService("Players").LocalPlayer), -- this is not the gamepass checker, it's for the pad grabber
 	prefix = "-",
 	firsttimenotification = true,
 	banned = {},
@@ -370,7 +370,7 @@ commands = {
 	["perm"] = {
 		name = "perm",
 		action = function()
-			if game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game:GetService("Players").LocalPlayer, 66254) then
+			if game:GetService("MarketplaceService"):UserOwnsGamePassAsync(66254, game:GetService("Players").LocalPlayer) then
 				return game:GetService("StarterGui"):SetCore("SendNotification", {
 					Title = "You already have Perm",
 					Text = "Can't disable Perm because you own the gamepass."
@@ -585,7 +585,7 @@ commands = {
 	["rkick"] = {
 		name = "rkick",
 		action = function(user: string)
-			if not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game:GetService("Players").LocalPlayer.UserId, 35748) then
+			if not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(35748, game:GetService("Players").LocalPlayer) then
 				game:GetService("StarterGui"):SetCore("SendNotification", {
 					Title = "Error",
 					Text = "P299 admin not found. This command is unavailable for you."
