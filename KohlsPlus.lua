@@ -522,10 +522,10 @@ commands = {
 			local u = GetPlayer(user)
 			run("respawn "..u.Name.." fuck																			")
 			task.wait(.1)
-			run("jail "..u.Name.. " fuck																				")
+			run("jail/"..u.Name)
 			task.spawn(function()
 				while spamming and u ~= nil do
-					game.Players.LocalPlayer.Character:PivotTo(u.Character:GetPivot() * CFrame.Angles(0,math.rad(180),0)*CFrame.new(0,0,-2))
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = (u.Character.HumanoidRootPart.CFrame * CFrame.Angles(0,math.rad(180),0)*CFrame.new(0,0,-2))
 					run("rocket/me/"..u.Name.."/me/"..u.Name)
 					task.wait(0.125)
 				end
@@ -953,10 +953,6 @@ game:GetService("RunService").Heartbeat:Connect(function(dt)
 			local name = v.Name
 			run("ungear/"..name)
 			run("ungear "..name)
-		end
-		if v.Character and v.Character:FindFirstChild("Rocket") then
-			task.defer(function() task.wait(.2)
-				v.Character.Rocket:Destroy() end)
 		end
 	end
 	if game:FindService("Players").LocalPlayer.PlayerGui:FindFirstChild("EFFECTGUIBLIND") then
