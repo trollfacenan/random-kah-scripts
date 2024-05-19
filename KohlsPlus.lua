@@ -524,6 +524,9 @@ commands = {
 			task.wait(.1)
 			run("jail/"..u.Name)
 			task.wait(.3)
+			for i = 1, 128 do
+				run("rocket/me "..u.Name.." me "..u.Name)
+			end
 			running = true
 			task.spawn(function()
 				while running and u ~= nil do
