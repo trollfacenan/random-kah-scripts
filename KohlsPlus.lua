@@ -524,11 +524,12 @@ commands = {
 			task.wait(.1)
 			run("jail/"..u.Name)
 			task.wait(.3)
+			running = true
 			task.spawn(function()
-				while spamming and u ~= nil do
+				while running and u ~= nil do
 					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = (u.Character.HumanoidRootPart.CFrame * CFrame.Angles(0,math.rad(180),0)*CFrame.new(0,0,-2))
-					run("rocket/me "..u.Name.." me "..u.Name)
-					task.wait(0.125)
+					run("rocket/all all all")
+					task.wait(0.1)
 				end
 			end)
 		end,
