@@ -526,8 +526,8 @@ commands = {
 			task.spawn(function()
 				while spamming and u ~= nil do
 					game.Players.LocalPlayer.Character:PivotTo(u.Character:GetPivot() * CFrame.Angles(0,math.rad(180),0)*CFrame.new(0,0,-2))
-					run("rocket/all all all")
-					task.wait(0.15)
+					run("rocket/me/"..u.Name.."/me/"..u.Name)
+					task.wait(0.125)
 				end
 			end)
 		end,
