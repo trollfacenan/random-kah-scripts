@@ -774,6 +774,31 @@ commands = {
 							end
 							task.wait(.225)
 							for i = 1, 32 do
+								run("sparkles/all all all									fuck")
+							end
+							task.wait(.11)
+							for i = 1, 32 do
+								run("sparkles/all all all									fuck")
+							end
+							task.wait(.11)
+							for i = 1, 32 do
+								run("sparkles/all all all									fuck")
+							end
+							task.wait(.11)
+							for i = 1, 32 do
+								run("sparkles/all all all									fuck")
+							end
+							task.wait(.11)
+							for i = 1, 32 do
+								run("sparkles/all all all									fuck")
+							end
+							task.wait(.11)
+							for i = 1, 32 do
+								run("sparkles/all all all									fuck")
+							end
+							task.wait(.11)
+							task.wait(.225)
+							for i = 1, 32 do
 								run("part/1/1/1									fuck")
 							end
 							task.wait(.225)
