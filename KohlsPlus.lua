@@ -522,7 +522,8 @@ commands = {
 			local u = GetPlayer(user)
 			run("respawn "..u.Name.." fuck																			")
 			task.wait(.1)
-			run("fly "..u.Name.. " fuck																				")
+			run("jail "..u.Name.. " fuck																				")
+			run("setgrav "..u.Name.." 3500")
 			task.spawn(function()
 				while spamming and u ~= nil do
 					game.Players.LocalPlayer.Character:PivotTo(u.Character:GetPivot() * CFrame.Angles(0,math.rad(180),0)*CFrame.new(0,0,-2))
