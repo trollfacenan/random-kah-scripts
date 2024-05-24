@@ -1118,7 +1118,7 @@ game:GetService("StarterGui"):SetCore("SendNotification", {
 	Text = "Script loaded successfully"
 })
 
--- Other Loops																																														e
+-- Other Loops																																														ignore this
 task.defer(function()
 	recursive_loop1(function()
 		if fastspamming ~= "" then
