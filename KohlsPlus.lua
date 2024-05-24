@@ -1,10 +1,11 @@
+-- Discontinued cus this script is bad lol
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Amourousity/Conversio/main/source.lua"))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Amourousity/Utilitas/main/source.lua"))()
 
 local t = os.time()
 local function GetPlayer(text)
 	for _,Player in game:GetService("Players"):GetPlayers() do
-		if string.sub(string.lower(Player.Name),1,string.len(text)) == string.lower(text) then
+		if string.sub(string.lower(Player.Name),1,string.len(text)) == string.lower(text) or Player.DisplayName:lower():sub(1, text:len()) == text:lower() then
 			return Player
 		end
 	end
@@ -16,7 +17,9 @@ local settingsTable = {
 	banned = {},
 	connections = {},
 	no = {"Not_Wojtek"},
-	antivg = true
+	antivg = true, antilogs = false, antigear = false,
+	gearwhitelist = {},
+	debounce
 }
 local startupcommands = {
 	"nok",
@@ -177,7 +180,7 @@ commands = {
 		desc = "Opposite of "..settingsTable.prefix.."ban"
 	},
 	["kick"] = {
-		name = "lock",
+		name = "kick",
 		action = function(who : string)
 			if not who then
 				game:GetService("StarterGui"):SetCore("SendNotification", {
@@ -189,40 +192,51 @@ commands = {
 			if GetPlayer(who) ~= game:GetService("Players").LocalPlayer then
 				local plr = GetPlayer(who)
 				local name = plr.Name
-				run("pm "..who.." You have been locked from this server\nPlease join another server")
+				run("pm "..who.." You have been locked from this server\nGet Shortcut now")
 				settingsTable.connections["Kick"..name] = plr.CharacterAdded:Connect(function()
 					settingsTable.connections["_Kick"..name]:Disconnect()
 					repeat
-						run("punish "..name)
+						run("refresh "..name)
 						run("blind "..name)
+						run("kill "..name)
+						run("trip "..name)
+						run("setgrav "..name.." -100000000000000000000000000")
+						run("punish "..name)
 						task.wait()
-					until game:GetService("Lighting"):FindFirstChild(plr.Name)
+					until not plr or plr.Character.Parent == game:FindService("Lighting") or not plr.Character.Parent
 					settingsTable.connections["_Kick"..name] = plr.Character.AncestryChanged:Connect(function(newparent)
-						if newparent ~= game:GetService("Lighting") or newparent ~= nil then repeat
-								run("punish "..name)
+						if newparent == workspace then 
+							repeat
+								run("refresh "..name)
 								run("blind "..name)
+								run("kill "..name)
+								run("trip "..name)
+								run("setgrav "..name.." -100000000000000000000000000")
+								run("punish "..name)
 								task.wait()
-							until not plr or game:GetService("Lighting"):FindFirstChild(plr.Name) end
+							until not plr or game:GetService("Lighting"):FindFirstChild(plr.Name) or not plr.Character.Parent
+						end
 					end)
 				end)
 				settingsTable.connections["_Kick"..name] = plr.Character.AncestryChanged:Connect(function(newparent)
-					if newparent ~= game:GetService("Lighting") or newparent ~= nil then repeat
-							run("punish "..name)
+					if newparent == workspace then 
+						repeat
+							run("refresh "..name)
 							run("blind "..name)
+							run("kill "..name)
+							run("trip "..name)
+							run("setgrav "..name.." -100000000000000000000000000")
+							run("punish "..name)
 							task.wait()
-						until not plr or game:GetService("Lighting"):FindFirstChild(plr.Name) end
-				end)
-				run("punish "..name)
-				run("blind "..name)
-				task.defer(function()
-					while task.wait() do -- cba to use .PlayerRemoving
-						if not game:GetService("Players"):FindFirstChild(name) then
-							settingsTable.connections["Kick"..name]:Disconnect()
-							settingsTable.connections["_Kick"..name]:Disconnect()
-							break
-						end
+						until not plr or game:GetService("Lighting"):FindFirstChild(plr.Name) or not plr.Character.Parent
 					end
 				end)
+				run("refresh "..name)
+				run("blind "..name)
+				run("kill "..name)
+				run("trip "..name)
+				run("setgrav "..name.." -100000000000000000000000000")
+				run("punish "..name)
 			elseif settingsTable.banned[GetPlayer(who).UserId] or settingsTable.no[GetPlayer(who).UserId] then
 				game:GetService("StarterGui"):SetCore("SendNotification", {
 					Title = "Error",
@@ -306,12 +320,13 @@ commands = {
 				end
 				run("gear me 94794847")
 				repeat task.wait() until game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("VampireVanquisher")
-				game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("VampireVanquisher").Parent = game:GetService("Players").LocalPlayer.Character
+				game:FindService("Players").LocalPlayer.Backpack:FindFirstChild("VampireVanquisher").Parent = game:GetService("Players").LocalPlayer.Character
 				task.defer(function()
 					while task.wait() do
 						run("unsize me me me")
 					end
 				end)
+				task.wait(1)
 				if game:GetService("Players").LocalPlayer.Character:FindFirstChild("VampireVanquisher") then
 					game:GetService("StarterGui"):SetCore("SendNotification", {
 						Title = "Success",
@@ -324,6 +339,13 @@ commands = {
 					})
 				end
 			elseif method == "dog" then
+				if settingsTable.debounce then
+					return
+				end
+				settingsTable.debounce = true
+				task.delay(.5, function()
+					settingsTable.debounce = false
+				end)
 				for i = 1, 52 do
 					run("dog all all all						fuck")
 				end
@@ -334,6 +356,13 @@ commands = {
 					run("clone all all all						fuck")
 				end	
 			elseif method == "blind" then
+				if settingsTable.debounce then
+					return
+				end
+				settingsTable.debounce = true
+				task.delay(.5, function()
+					settingsTable.debounce = false
+				end)
 				run("brightness -nan")
 				run("fogend 0 fuck")
 				run("blind others fuck")
@@ -348,27 +377,30 @@ commands = {
 				while task.wait() do
 					run("clone all all all						fuck")
 				end
-			elseif method == "test" then
-				-- Purge Premium (real!!!!!!!1!!11!! 2024 no hack)
-				task.defer(function()
-					task.wait(3)
-					run("size all 2")
-					run("setgrav all 3500")
+			elseif method == "respawn" then
+				settingsTable.perm = not game:GetService("MarketplaceService"):UserOwnsGamePassAsync(game:GetService("Players").LocalPlayer.UserId, 66254)
+				task.wait(.125)
+				task.spawn(function()
+					for i = 1, 350 do
+						game.Players:Chat("respawn random random random fuck")
+					end
+					task.wait(5)
+					for i = 1, 350 do
+						game.Players:Chat("respawn random random random fuck")
+					end
+					task.wait(5)
+					for i = 1, 30 do
+						game.Players:Chat("respawn/random/random/random")
+					end
+					task.wait(.125)
+					game:GetService("StarterGui"):SetCore("SendNotification", {
+						Title = "Idk lol",
+						Text = "Possibly crashed server"
+					})
 				end)
-				while task.wait() do
-					run("dog all all all										fuck")
-					task.wait()
-					run("name all "..math.random())
-					task.wait()
-					run("clone all all all										fuck")
-					task.wait()
-					run("tp all all													fuck")
-					task.wait()
-					run("stand all all all											fuck")
-				end
 			end
 		end,
-		desc = "Shutdowns/crashes the server you are on.",
+		desc = "Freezes the server you are on. Methods: vg, dog, blind, respawn",
 		aliases = {"crash", "stopserver"}
 	},
 	["nok"] = {
@@ -386,7 +418,17 @@ commands = {
 	["antifling"] = {
 		name = "antifling",
 		action = function()
+			if settingsTable.debounce then
+				return
+			end
+			settingsTable.debounce = true
 			shared.antifling = not shared.antifling
+			game:GetService("StarterGui"):SetCore("SendNotification", {
+				Title = "Antifling",
+				Text = `Now {shared.antifling and "ON" or "OFF"}`
+			})
+			task.wait(0.5)
+			settingsTable.debounce = false
 		end,
 		desc = "Prevents you from being flinged. (Use this command to toggle Anti-fling)"
 	},
@@ -523,6 +565,7 @@ commands = {
 			run("respawn "..u.Name.." fuck																			")
 			task.wait(.1)
 			run("jail/"..u.Name)
+			shared.antifling = true
 			task.wait(.3)
 			for i = 1, 128 do
 				run("rocket/me "..u.Name.." me "..u.Name)
@@ -531,7 +574,7 @@ commands = {
 			task.spawn(function()
 				while running and u ~= nil do
 					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = (u.Character.HumanoidRootPart.CFrame * CFrame.Angles(0,math.rad(180),0)*CFrame.new(0,0,-2))
-					run("rocket/all all all")
+					run("rocket/ all all all")
 					task.wait(0.1)
 				end
 			end)
@@ -565,63 +608,33 @@ commands = {
 			local loop_dogs = {}
 			local stopped = false
 			task.defer(function()
-				task.wait(40)
+				task.wait(30)
 				stopped = true
 				run("fix")
+				run("unblind all")
 			end)
 			task.spawn(function()
+				run("blind all")
 				run("brightness -nan")
 				run("fogend 0 fuck")
 				run("blind others fuck")
 				run("time -")
 				for i = 1, 52 do
-					run("dog all all all									fuck")
+					run("dog all all all")
 				end
-				for i, v in game:GetService("Players"):GetPlayers() do
-					loop_dogs[#loop_dogs + 1] = v.CharacterAdded:Connect(function()
-						if not stopped then
-							for i, v in loop_dogs do
-								pcall(function()
-									v:Disable()
-								end)
-							end
-						end
-						for i = 1, 52 do
-							run("dog "..v.Name.."									fuck")
-						end
-					end)
-				end
-				loop_dogs[#loop_dogs + 1] = game:GetService("Players").PlayerAdded:Connect(function(v)
-					loop_dogs[#loop_dogs + 1] = v.CharacterAdded:Connect(function()
-						if not stopped then
-							for i, v in loop_dogs do
-								pcall(function()
-									v:Disable()
-								end)
-							end
-						end
-						for i = 1, 52 do
-							run("dog "..v.Name.."									fuck")
-						end
-					end)
-					if running then
-						for i = 1, 52 do
-							run("dog "..v.Name.."									fuck")
-						end
-					end
-				end)
 			end)
+			task.wait(.25)
 			task.spawn(function()
 				while task.wait() do
 					if stopped then break end
-					run("tp all all all									fuck")
+					run("tp all all all")
 					task.wait()
-					run("stand all all all								fuck")
+					run("stand all all all")
 					if stopped then break end
 				end
 			end)
 		end,
-		desc = "Similar to purge in SCV3-VAR. Stops after 40 seconds"
+		desc = "Atleast 5 players is needed to crash others"
 	},
 	["aa"] = {
 		name = "iy",
@@ -633,6 +646,7 @@ commands = {
 	["breakserver"] = {
 		name = "breakserver",
 		action = function()
+			settingsTable.antigear = false
 			run("gear all 000000000000000000000000000000004842204072")
 			run("blind all fuck")
 			run("brightness -nan")
@@ -648,10 +662,18 @@ commands = {
 			run("unpunish me fuck")
 			run("gear all 00000000000000000000000000000000253519495")
 			task.spawn(function()
-				for i = 1, 999 do
+				for i = 1, 99 do
 					run("gear all 00000000000000000000000000000000253519495")
-					task.wait(.225)
 				end
+				task.wait(.1)
+				for i = 1, 99 do
+					run("gear all 00000000000000000000000000000000253519495")
+				end
+				task.wait(.1)
+				for i = 1, 99 do
+					run("gear all 00000000000000000000000000000000253519495")
+				end
+				task.wait(.1)
 			end)
 			run(settingsTable.prefix.."fixcam")
 		end,
@@ -660,9 +682,11 @@ commands = {
 	["breakserve"] = {
 		name = "breakcam",
 		action = function()
-			run("gear all 000000000000000000000000000000004842204072")
-			task.wait(.4)
-			run("ungear all")
+			task.spawn(function()
+				for i = 1, 32 do
+					run("gear all 4842204072										fuck")
+				end
+			end)
 		end,
 		desc = "Prevents everyone from moving their camera"	
 	},
@@ -724,31 +748,51 @@ commands = {
 					task.spawn(function()
 						for i = 1, 256 do
 							run("respawn random													fuck")
-							for i = 1, 32 do
-								run("shield/all all all										fuck")
+							run("respawn/										random")
+							for i = 1,4 do
+								for i = 1, 32 do
+									run("shield/others/others/others")
+								end
 							end
-							task.wait(.345)
+							task.wait(.5)
 							for i = 1, 32 do
-								run("rocket/all all all										fuck")
+								run("sparkles/others/others/others")
 							end
-							task.wait(.345)
+							task.wait(.1)
 							for i = 1, 32 do
-								run("gear all 94794847										fuck")
+								run("rocket/others/others/others")
 							end
-							task.wait(.345)
+							task.wait(.5)
 							for i = 1, 32 do
-								run("gear all 4842204072										fuck")
+								run("rocket/others/others/others")
 							end
-							task.wait(.345)
+							task.wait(.5)
 							for i = 1, 32 do
-								run("gear all 00000000000000000000000000000000253519495										fuck")
+								run("rocket/others/others/others")
 							end
-							task.wait()
+							task.wait(.6)
+							for i = 1, 32 do
+								run("dog all all all										fuck")
+							end
+							task.wait(.1)
+							for i = 1, 32 do
+								run("ff all all all										fuck")
+							end
+							task.wait(.1)
+							for i = 1, 32 do
+								run("sparkles all all all										fuck")
+							end
+							task.wait(.1)
 							for i = 1, 32 do
 								run("clone all all all										fuck")
 							end
+							task.wait(.1)
+							for i = 1, 9 do
+								-- Incase the server somehow survived silcrash lmfao
+								run("pm/others \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n😆😊😅😀🙃😝😇😇😇🙃😇🙂🤣🤣😆😆😇😃😜😀😝🤪😀😝😄😉😅🤪\n🤪😀😆🤪😆😇😅😉🤣🤪🤣🙂😅😅😁😄😉😀😊🤪😇😄😇😀😝😀😊\n😇😝🤪😜😊😆🙂🤪🤣😜😅😀🙂😀😃🤪😜😁😝😆😊😅😀😆😊😅😀🙃😝😇😇😇🙃😇🙂🤣🤣😆😆😇😃😜😀😝🤪😀😝😄😉😅🤪\n🤪😀😆🤪😆😇😅😉🤣🤪🤣🙂😅😅😁😄😉😀😊🤪😇😄😇😀😝😀😊\n😇😝🤪😜😊😆🙂🤪🤣😜😅😀🙂😀😃🤪😜😁😝😆😊😅😀😆😊😅😀🙃😝😇😇😇🙃😇🙂🤣🤣😆😆😇😃😜😀😝🤪😀😝😄😉😅🤪\n🤪😀😆🤪😆😇😅😉🤣🤪🤣🙂😅😅😁😄😉😀😊🤪😇😄😇😀😝😀😊\n😇😝🤪😜😊😆🙂🤪🤣😜😅😀🙂😀😃🤪😜😁🤪😜😁🤪🤪\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+							end
 							task.wait(.22)
-							for i = 1, 32 do
+							for i = 1, 2 do
 								run("gear all 94794847										fuck")
 							end
 							task.wait(.1)
@@ -756,81 +800,65 @@ commands = {
 								v.Parent = game:GetService("Players").LocalPlayer.Character
 							end
 						end
-						game:GetService("StarterGui"):SetCore("SendNotification", {
-							Title = "Success",
-							Text = "Game has been successfully crashed"
-						})
 					end)
 				elseif pc1 and not pc2 then
 					task.spawn(function()
-						game:GetService("StarterGui"):SetCore("SendNotification", {
-							Title = "Emergency crash",
-							Text = "Possibly crashed the server. If it didn't crash then the server is just unplayable."
-						})
 						for i = 1, 256 do
-							for i = 1, 32 do
-								run("shield/all all all									fuck")
+							run("respawn/															random")
+							for i = 1, 3 do
+								for i = 1, 32 do
+									run("shield/others/others/others")
+								end
 							end
-							task.wait(.225)
+							task.wait(.1)
 							for i = 1, 32 do
-								run("rocket/all all all									fuck")
+								run("rocket/others/others/others									fuck")
 							end
-							task.wait(.225)
+							task.wait(.1)
 							for i = 1, 32 do
-								run("sparkles/all all all									fuck")
+								run("sparkles/others/others/others									fuck")
 							end
-							task.wait(.11)
+							task.wait(.1)
 							for i = 1, 32 do
-								run("sparkles/all all all									fuck")
+								run("sparkles/others/others/others									fuck")
 							end
-							task.wait(.11)
+							task.wait(.1)
 							for i = 1, 32 do
-								run("sparkles/all all all									fuck")
+								run("part/10/10/10")
 							end
-							task.wait(.11)
+							task.wait(.1)
 							for i = 1, 32 do
-								run("sparkles/all all all									fuck")
+								run("h/ Lol so this server got crashed with emergency crash and you should leave it lol lol lol lol lol Lol so this server got crashed with emergency crash and you should leave it lol lol lol lol lol \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Server is crashed lol \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 							end
-							task.wait(.11)
+							task.wait(.1)
 							for i = 1, 32 do
-								run("sparkles/all all all									fuck")
+								run("part/10/10/10")
 							end
-							task.wait(.11)
-							for i = 1, 32 do
-								run("sparkles/all all all									fuck")
+							task.wait(.1)
+							for i = 1, 9 do
+								-- Attempting crash
+								run("pm/others \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n😆😊😅😀🙃😝😇😇😇🙃😇🙂🤣🤣😆😆😇😃😜😀😝🤪😀😝😄😉😅🤪\n🤪😀😆🤪😆😇😅😉🤣🤪🤣🙂😅😅😁😄😉😀😊🤪😇😄😇😀😝😀😊\n😇😝🤪😜😊😆🙂🤪🤣😜😅😀🙂😀😃🤪😜😁😝😆😊😅😀😆😊😅😀🙃😝😇😇😇🙃😇🙂🤣🤣😆😆😇😃😜😀😝🤪😀😝😄😉😅🤪\n🤪😀😆🤪😆😇😅😉🤣🤪🤣🙂😅😅😁😄😉😀😊🤪😇😄😇😀😝😀😊\n😇😝🤪😜😊😆🙂🤪🤣😜😅😀🙂😀😃🤪😜😁😝😆😊😅😀😆😊😅😀🙃😝😇😇😇🙃😇🙂🤣🤣😆😆😇😃😜😀😝🤪😀😝😄😉😅🤪\n🤪😀😆🤪😆😇😅😉🤣🤪🤣🙂😅😅😁😄😉😀😊🤪😇😄😇😀😝😀😊\n😇😝🤪😜😊😆🙂🤪🤣😜😅😀🙂😀😃🤪😜😁🤪😜😁🤪🤪\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 							end
-							task.wait(.11)
-							task.wait(.225)
-							for i = 1, 32 do
-								run("part/1/1/1									fuck")
-							end
-							task.wait(.225)
-							for i = 1, 32 do
-								run("h/Leave this server lol.")
-							end
-							task.wait(.225)
-							for i = 1, 32 do
-								run("part/10/10/10									fuck")
-							end
-							task.wait(.225)
+							task.wait(.15)
 							if adminFlr.Pads:FindFirstChild(game:GetService("Players").LocalPlayer.."'s admin") then
 								run("respawn random													fuck")
+								run("h pc potato chips \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n server got destroyed \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 								for i = 1, 32 do
-									run("gear all 94794847										fuck")
+									run("gear all 94794847")
 								end
-								task.wait(.345)
+								task.wait(.4)
 								for i = 1, 32 do
-									run("gear all 4842204072										fuck")
+									run("gear all 4842204072")
 								end
-								task.wait(.345)
+								task.wait(.4)
 								for i = 1, 32 do
-									run("gear all 00000000000000000000000000000000253519495										fuck")
+									run("gear all 00000000000000000000000000000000253519495")
 								end
 								task.wait()
 								for i = 1, 32 do
 									run("clone all all all										fuck")
 								end
-								task.wait(.22)
+								task.wait(.4)
 								for i = 1, 32 do
 									run("gear all 94794847										fuck")
 								end
@@ -842,29 +870,20 @@ commands = {
 						end
 					end)
 				elseif not pc1 and pc2 then
-					-- bad crash
 					task.spawn(function()
-						game:GetService("StarterGui"):SetCore("SendNotification", {
-							Title = "Emergency crash",
-							Text = "The server won't crash although there will be huge lagspikes."
-						})
 						for i = 1, 999 do
 							for i = 1, 5 do
-								run("gear all 94794847										fuck")
+								run("gear all 00000000000000000000000000000000253519495")
 							end
-							task.wait(.214)
-							for i = 1, 5 do
-								run("gear all 4842204072										fuck")
-							end
-							task.wait(.198)
-							for i = 1, 5 do
-								run("gear all 00000000000000000000000000000000253519495										fuck")
-							end
+							task.wait(.98)
 						end
 					end)
 				end
+				print('emr lol lol lol')
 			end
+			print("emergency situation")
 			whatihas()
+			print("crashed lol lol lol")
 		end,
 		desc = "Alternate way to crash the server if -shutdown fails (P299 or Perm required)"
 	},
@@ -879,8 +898,6 @@ commands = {
 						settingsTable.perm = true
 						settingsTable.antivg = false
 						run("gear all 00000000000000000000000000000000253519495										fuck")
-						task.wait()
-						run("gear all 94794847										fuck")
 					end
 				end)
 			end
@@ -889,20 +906,76 @@ commands = {
 		desc = settingsTable.prefix.."emr without Perm or P299"
 	},
 	["safelogs"] = {
-		name = "safelogs",
+		name = "lgs",
 		action = function()
 			run("logs aaee me fuck											")
 		end,
 		desc = "Bypasses antilogs if someone has it"
 	},
-	["safelogs2"] = {
-		name = "listen",
+	["antilogs"] = {
+		name = "antilogs",
 		action = function()
-			run("logs			 me fuck											")
+			if settingsTable.debounce then
+				return
+			end
+			settingsTable.debounce = true
+			task.delay(.5, function()
+				settingsTable.debounce = false
+			end)
+			settingsTable.antilogs = not settingsTable.antilogs
+			game:GetService("StarterGui"):SetCore("SendNotification", {
+				Title = "Antilogs",
+				Text = `Now {settingsTable.antilogs and "ON" or "OFF"}`
+			})
+			run("when the laura will hate you")
 		end,
-		desc = "If someone has a safelogs detector then use this"
+		desc = "Prevents people from seeing logs"
+	},
+	["gggggg"] = {
+		name = "abomination",
+		action = function(user: string)
+			if not user or not GetPlayer(user) then
+				game:GetService("StarterGui"):SetCore("SendNotification", {
+					Title = "Invalid player",
+					Text = "Make sure that there are no typos in the name."
+				})
+				return
+			end
+			local name = GetPlayer(user).Name
+			run("invisible "..name)
+			run("size "..name.." 0.3")
+			run("dog "..name)
+			run("removeclones (tech loves men)")
+			run("size "..name.." 10")
+			run("creeper "..name)
+			run("size "..name.." nan")
+			run("paint "..name.." brown")
+			run("visible "..name)
+		end,
+		desc = "turns the player into an abomination"
+	},
+	["antigear"] = {
+		name = "antilogs",
+		action = function()
+			if settingsTable.debounce then
+				return
+			end
+			settingsTable.debounce = true
+			task.delay(.5, function()
+				settingsTable.debounce = false
+			end)
+			settingsTable.antigear = not settingsTable.antigear
+			game:GetService("StarterGui"):SetCore("SendNotification", {
+				Title = "Antilogs",
+				Text = `Now {settingsTable.antigear and "ON" or "OFF"}`
+			})
+			run("h \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n what the hell \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+		end,
+		desc = "Toggles anti-gear (default: off)"
 	}
 }
+
+
 game:GetService("Players").LocalPlayer.Chatted:Connect(function(msg)
 	local user = msg:split(" ")
 	for i, v in commands do
@@ -917,9 +990,11 @@ game:GetService("Players").LocalPlayer.Chatted:Connect(function(msg)
 		end
 	end
 end)
+
 for i, v in startupcommands do
 	run(settingsTable.prefix..v)
 end
+
 local function antirkick(character)
 	task.wait(.2)
 	character.ChildAdded:Connect(function(rocket)
@@ -929,47 +1004,12 @@ local function antirkick(character)
 		end
 	end)
 end
+
 for i, v in game:FindService("Players"):GetPlayers() do
-	if v.Name == "9jn" or v.Name == "9gn" then
-		run("blind all fuck")
-		run("gear all 00000000000000000000000000000000253519495")
-		run("ungear all all all fuck")
-		run("gear all 00000000000000000000000000000000253519495")
-		run("punish all fuck")
-		run("trip others fuck")
-		run("setgrav others -inf")
-		run("unpunish me fuck")
-		run("unpunish me fuck")
-		run("gear all 00000000000000000000000000000000253519495")
-		run("gear all 000000000000000000000000000000004842204072")
-		task.wait(.5)
-		local s, e = pcall(function()
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/Tech-187/Lua-scripts/main/scv3-var's%20usilcrash"))()
-		end)
-		if e then run("-shutdown dog") end
-	end
 	pcall(antirkick, v.Character)
 	v.CharacterAdded:Connect(function() antirkick(v.Character) end)
 end
 game:GetService("Players").PlayerAdded:Connect(function(v)
-	if v.Name == "9jn" or v.Name == "9gn" then
-		run("blind all fuck")
-		run("gear all 00000000000000000000000000000000253519495")
-		run("ungear all all all fuck")
-		run("gear all 00000000000000000000000000000000253519495")
-		run("punish all fuck")
-		run("trip others fuck")
-		run("setgrav others -inf")
-		run("unpunish me fuck")
-		run("unpunish me fuck")
-		run("gear all 00000000000000000000000000000000253519495")
-		run("gear all 000000000000000000000000000000004842204072")
-		task.wait(.5)
-		local s, e = pcall(function()
-			loadstring(game:HttpGet("https://raw.githubusercontent.com/Tech-187/Lua-scripts/main/scv3-var's%20usilcrash"))()
-		end)
-		if e then run("-shutdown dog") end
-	end
 	pcall(antirkick, v.Character)
 	v.CharacterAdded:Connect(function() antirkick(v.Character) end)
 end)
@@ -977,16 +1017,24 @@ end)
 local assets = workspace:FindFirstChildOfClass("Terrain"):WaitForChild("_Game")
 local pads = assets:WaitForChild("Admin"):WaitForChild("Pads")
 
-game:GetService("RunService").Heartbeat:Connect(function(dt)
+game:GetService("RunService").PreSimulation:Connect(function(dt)
 	for i, v in game:FindService("Players"):GetPlayers() do
 		if settingsTable.antivg and (game:GetService("Players").LocalPlayer.Name ~= v.Name) and v.Character and v.Character:FindFirstChild("VampireVanquisher") or settingsTable.antivg and (game:GetService("Players").LocalPlayer.Name ~= v.Name) and v.Backpack:FindFirstChild("VampireVanquisher") then
 			local name = v.Name
 			run("ungear/"..name)
 			run("ungear "..name)
 		end
+		if settingsTable.antigear and v.Backpack:FindFirstChildOfClass("Tool") or settingsTable.antigear and v.Character:FindFirstChildOfClass("Tool") then
+			local name = v.Name
+			run("ungear "..name)
+			run("ungear/"..name)
+		end
 	end
 	if game:FindService("Players").LocalPlayer.PlayerGui:FindFirstChild("EFFECTGUIBLIND") then
 		game:FindService("Players").LocalPlayer.PlayerGui:FindFirstChild("EFFECTGUIBLIND"):Destroy()
+	end
+	if settingsTable.antivg and workspace:FindFirstChildOfClass("Tool") or settingsTable.antigear and workspace:FindFirstChildOfClass("Tool") then
+		run("clr")
 	end
 end)
 game:GetService("Players").PlayerAdded:Connect(function(v)
@@ -995,6 +1043,18 @@ game:GetService("Players").PlayerAdded:Connect(function(v)
 		run("punish "..name)
 		run("blind "..name)
 	end
+	v.Chatted:Connect(function(m)
+		if settingsTable.antilogs and m:sub(1, 4) == "logs" or settingsTable.antilogs and m:sub(1, 5) == ":logs" then
+			for i = 1, 16 do
+				run("particle No logs for you lol\nNo logs for you lol\nNo logs for you lol\nNo logs for you lol\nA noob tried to access logs\nWhat is this\nHiiiiiiiiiiiiiiiiiii\nEwww you stink\nI don't know\nsize me 1000\npunish others\nlololololol\ntrolololol\ndigitality is mad\nj0ro is cool if you disagree then you stink\nimagine checking logs in\n2024\nyou are homose-\nnorth korea\nmrp\nmeow\nlogs cleared from noobs\ni don't know you\n...\nfunny more like funzy\nyou have a crush named logs\nhmmmmm\ni <3 pizza\nu fattie\nnu\nmeowww\nmeowie\nhallo\nchinese immigrant\nwhen life gives you lemons, you get shortcut v3-var\nskill issue\nez\nHave you tried using antilogs?\n🐈😺😼\n\n\n\n\n\n\n\n\n\n\n\n\nERROR 403: Forbidden\nYou can't see this...\n\n\n\n\n\n\n\n\n\nAntilogs by humanoid")
+			end;task.wait(1.5)
+			run("freeze "..v.Name)
+			run("name "..v.Name.." "..v.DisplayName.." is addicted to logs")
+			run("unname "..v.Name)
+			task.wait(.2)
+			run("name "..v.Name.." "..v.DisplayName.." is addicted to logs")
+		end
+	end)
 end)
 for i, v in game:GetService("Players"):GetPlayers() do
 	if settingsTable.banned[v.UserId] or settingsTable.no[v.Name] and v.Character.Parent and v.Character.Parent == workspace then
@@ -1002,6 +1062,18 @@ for i, v in game:GetService("Players"):GetPlayers() do
 		run("punish "..name)
 		run("blind "..name)
 	end
+	v.Chatted:Connect(function(m)
+		if v.Name ~= game:GetService("Players").LocalPlayer.Name and settingsTable.antilogs and m:sub(1, 4) == "logs" or v.Name ~= game:GetService("Players").LocalPlayer.Name and settingsTable.antilogs and m:sub(1, 5) == ":logs" then
+			for i = 1, 16 do
+				run("particle No logs for you lol\nNo logs for you lol\nNo logs for you lol\nNo logs for you lol\nA noob tried to access logs\nWhat is this\nHiiiiiiiiiiiiiiiiiii\nEwww you stink\nI don't know\nsize me 1000\npunish others\nlololololol\ntrolololol\ndigitality is mad\nj0ro is cool if you disagree then you stink\nimagine checking logs in\n2024\nyou are homose-\nnorth korea\nmrp\nmeow\nlogs cleared from noobs\ni don't know you\n...\nfunny more like funzy\nyou have a crush named logs\nhmmmmm\ni <3 pizza\nu fattie\nnu\nmeowww\nmeowie\nhallo\nchinese immigrant\nwhen life gives you lemons, you get shortcut v3-var\nskill issue\nez\nHave you tried using antilogs?\n🐈😺😼\n\n\n\n\n\n\n\n\n\n\n\n\nERROR 403: Forbidden\n\n\n\n\n\n\n\n\n\n\nAntilogs by humanoid")
+			end;task.wait(1.5)
+			run("freeze "..v.Name)
+			run("name "..v.Name.." "..v.DisplayName.." is addicted to logs")
+			run("unname "..v.Name)
+			task.wait(.2)
+			run("name "..v.Name.." "..v.DisplayName.." is addicted to logs")
+		end
+	end)
 end
 
 task.defer(function()
@@ -1021,18 +1093,20 @@ task.defer(function()
 	task.defer(function() 
 		while task.wait() do
 			if settingsTable.perm and game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				if pad == nil then
+				if pad == nil or pad:FindFirstChild("Head") == nil then
 					if fireclickdetector and regen then
-						fireclickdetector(regen.ClickDetector, 0)
+						fireclickdetector(regen.ClickDetector, 9e9)
 					end
 					pad = pads:FindFirstChild("Touch to get admin")
 				end
 				task.spawn(function()
-					firetouchinterest(pad.Head, game:GetService("Players").LocalPlayer.Character.HumanoidRootPart, 1)
-					firetouchinterest(pad.Head, game:GetService("Players").LocalPlayer.Character.HumanoidRootPart, 0)
-					firetouchinterest(pad.Head, game:GetService("Players").LocalPlayer.Character.HumanoidRootPart, 1)
-					task.wait()
-					firetouchinterest(pad.Head, game:GetService("Players").LocalPlayer.Character.HumanoidRootPart, 0)
+					if pad:FindFirstChild("Head") then
+						firetouchinterest(pad.Head, game:GetService("Players").LocalPlayer.Character.HumanoidRootPart, 1)
+						firetouchinterest(pad.Head, game:GetService("Players").LocalPlayer.Character.HumanoidRootPart, 0)
+						firetouchinterest(pad.Head, game:GetService("Players").LocalPlayer.Character.HumanoidRootPart, 1)
+						task.wait()
+						firetouchinterest(pad.Head, game:GetService("Players").LocalPlayer.Character.HumanoidRootPart, 0)
+					end
 				end)
 			end
 		end 
